@@ -40,7 +40,6 @@
             z-index: 100;
             border-right: 1px solid #eaeaea;
             transition: all 0.3s ease;
-            overflow: hidden;
         }
 
         body.dark-mode .sidebar {
@@ -61,6 +60,7 @@
             transition: background-color 0.3s, border-color 0.3s;
             position: relative;
             min-height: 120px;
+            flex-shrink: 0;
         }
 
         body.dark-mode .logo {
@@ -81,11 +81,46 @@
             color: #4d8aff;
         }
 
+        /* Contenedor para el menú con scroll */
+        .menu-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+
         .menu-modules {
             flex: 1;
             padding: 30px 0;
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Estilos para la barra de scroll personalizada */
+        .menu-modules::-webkit-scrollbar {
+            width: 6px;
+            background: transparent;
+        }
+
+        .menu-modules::-webkit-scrollbar-thumb {
+            background-color: rgba(42, 82, 152, 0.3);
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-modules::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(42, 82, 152, 0.5);
+        }
+
+        body.dark-mode .menu-modules::-webkit-scrollbar-thumb {
+            background-color: rgba(77, 138, 255, 0.3);
+        }
+
+        body.dark-mode .menu-modules::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(77, 138, 255, 0.5);
         }
 
         .module-item {
@@ -205,6 +240,7 @@
             justify-content: space-between;
             background: #f8fafc;
             transition: background-color 0.3s, border-color 0.3s;
+            flex-shrink: 0;
         }
 
         .sidebar.collapsed .dark-mode-toggle {
@@ -290,6 +326,7 @@
             background: #f8fafc;
             margin-top: auto;
             transition: background-color 0.3s, border-color 0.3s;
+            flex-shrink: 0;
         }
 
         .sidebar.collapsed .user-section {
@@ -995,54 +1032,61 @@
             </button>
         </div>
         
-        <nav class="menu-modules">
-            <a href="#" class="module-item active" data-module="operativo">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Operativo</span>
-            </a>
-            <a href="#" class="module-item" data-module="operaciones">
-                <i class="fas fa-cogs"></i>
-                <span>Operaciones</span>
-            </a>
-            <a href="#" class="module-item" data-module="estrategico">
-                <i class="fas fa-chart-line"></i>
-                <span>Estratégico</span>
-            </a>
-            <a href="#" class="module-item" data-module="ejecutivo">
-                <i class="fas fa-users"></i>
-                <span>Ejecutivo</span>
-            </a>
-            <a href="#" class="module-item" data-module="reportes">
-                <i class="fas fa-file-alt"></i>
-                <span>Reportes</span>
-            </a>
-        </nav>
-        
-        <!-- TOGGLE MODO OSCURO -->
-        <div class="dark-mode-toggle">
-            <span class="dark-mode-label">Modo Oscuro</span>
-            <label class="toggle-switch">
-                <input type="checkbox" id="darkModeToggle">
-                <span class="toggle-slider"></span>
-            </label>
-        </div>
-        
-        <!-- SECCIÓN DE USUARIO EN EL MENÚ -->
-        <div class="user-section">
-            <div class="user-details">
-                <div class="user-name">Carlos Rodríguez</div>
-                <div class="user-role">Administrador</div>
+        <!-- CONTENEDOR PARA EL MENÚ CON SCROLL -->
+        <div class="menu-container">
+            <nav class="menu-modules">
+                <a href="#" class="module-item active" data-module="operativo">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Operativo</span>
+                </a>
+                <a href="#" class="module-item" data-module="operaciones">
+                    <i class="fas fa-cogs"></i>
+                    <span>Operaciones</span>
+                </a>
+                <a href="#" class="module-item" data-module="estrategico">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Estratégico</span>
+                </a>
+                <a href="#" class="module-item" data-module="ejecutivo">
+                    <i class="fas fa-users"></i>
+                    <span>Ejecutivo</span>
+                </a>
+                <a href="#" class="module-item" data-module="usuarios">
+                    <i class="fas fa-user-friends"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a href="#" class="module-item" data-module="reportes">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reportes</span>
+                </a>
+            </nav>
+            
+            <!-- TOGGLE MODO OSCURO -->
+            <div class="dark-mode-toggle">
+                <span class="dark-mode-label">Modo Oscuro</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
             
-            <div class="user-actions">
-                <button class="action-btn profile" id="profileBtn">
-                    <i class="fas fa-user-circle"></i>
-                    <span>Perfil</span>
-                </button>
-                <button class="action-btn logout" id="logoutBtn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Cerrar Sesión</span>
-                </button>
+            <!-- SECCIÓN DE USUARIO EN EL MENÚ -->
+            <div class="user-section">
+                <div class="user-details">
+                    <div class="user-name">Carlos Rodríguez</div>
+                    <div class="user-role">Administrador</div>
+                </div>
+                
+                <div class="user-actions">
+                    <button class="action-btn profile" id="profileBtn">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Perfil</span>
+                    </button>
+                    <button class="action-btn logout" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Cerrar Sesión</span>
+                    </button>
+                </div>
             </div>
         </div>
     </aside>
@@ -1182,7 +1226,7 @@
                     { name: "Pago Móvil", revenue: 1254320, percentage: 21.5, color: "#2196F3" },
                     { name: "Tarjeta de Débito", revenue: 985320, percentage: 16.9, color: "#FF9800" },
                     { name: "Tarjeta de Crédito", revenue: 654200, percentage: 11.2, color: "#9C27B0" },
-                    { name: "Tag (Teletrpeaje)", revenue: 298160, percentage: 5.1, color: "#3F51B5" },
+                    { name: "Tag", revenue: 298160, percentage: 5.1, color: "#3F51B5" },
                     { name: "Transferencia", revenue: 65400, percentage: 1.1, color: "#00BCD4" },
                     { name: "Billetera Digital", revenue: 45600, percentage: 0.8, color: "#8BC34A" }
                 ]
@@ -1213,7 +1257,7 @@
                     { name: "Pago Móvil", revenue: 34043200, percentage: 21.5, color: "#2196F3" },
                     { name: "Tarjeta de Débito", revenue: 26783200, percentage: 16.9, color: "#FF9800" },
                     { name: "Tarjeta de Crédito", revenue: 17742000, percentage: 11.2, color: "#9C27B0" },
-                    { name: "Tag (Teletrpeaje)", revenue: 8081600, percentage: 5.1, color: "#3F51B5" },
+                    { name: "Tag", revenue: 8081600, percentage: 5.1, color: "#3F51B5" },
                     { name: "Transferencia", revenue: 1743400, percentage: 1.1, color: "#00BCD4" },
                     { name: "Billetera Digital", revenue: 1267400, percentage: 0.8, color: "#8BC34A" }
                 ]
@@ -1244,7 +1288,7 @@
                     { name: "Pago Móvil", revenue: 407432000, percentage: 21.5, color: "#2196F3" },
                     { name: "Tarjeta de Débito", revenue: 320432000, percentage: 16.9, color: "#FF9800" },
                     { name: "Tarjeta de Crédito", revenue: 212420000, percentage: 11.2, color: "#9C27B0" },
-                    { name: "Tag (Teletrpeaje)", revenue: 96616000, percentage: 5.1, color: "#3F51B5" },
+                    { name: "Tag", revenue: 96616000, percentage: 5.1, color: "#3F51B5" },
                     { name: "Transferencia", revenue: 20874000, percentage: 1.1, color: "#00BCD4" },
                     { name: "Billetera Digital", revenue: 15174000, percentage: 0.8, color: "#8BC34A" }
                 ]
@@ -1702,6 +1746,10 @@
                         case 'ejecutivo':
                             pageTitle.innerHTML = '<i class="fas fa-users"></i> Módulo Ejecutivo';
                             pageSubtitle.textContent = 'Dashboard ejecutivo con indicadores de alto nivel';
+                            break;
+                        case 'usuarios':
+                            pageTitle.innerHTML = '<i class="fas fa-user-friends"></i> Módulo de Usuarios';
+                            pageSubtitle.textContent = 'Gestión de usuarios y permisos del sistema';
                             break;
                         case 'reportes':
                             pageTitle.innerHTML = '<i class="fas fa-file-alt"></i> Módulo de Reportes';
