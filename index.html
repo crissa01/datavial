@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Operativo - DataVial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        /* MENÚ LATERAL IZQUIERDO - MÁS ANCHO Y SIMPLIFICADO */
+        .sidebar {
+            width: 320px;
+            background: #ffffff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.08);
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            border-right: 1px solid #eaeaea;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        body.dark-mode .sidebar {
+            background: #1e1e1e;
+            border-right: 1px solid #333;
+            color: #e0e0e0;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .logo {
+            padding: 30px 20px;
+            border-bottom: 1px solid #eaeaea;
+            text-align: center;
+            background: #ffffff;
+            transition: background-color 0.3s, border-color 0.3s;
+            position: relative;
+            min-height: 120px;
+        }
+
+        body.dark-mode .logo {
+            background: #1e1e1e;
+            border-bottom: 1px solid #333;
+        }
+
+        .logo h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-top: 15px;
+            letter-spacing: 1px;
+            color: #2a5298;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .logo h2 {
+            color: #4d8aff;
+        }
+
+        .menu-modules {
+            flex: 1;
+            padding: 30px 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .module-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 30px;
+            color: #555;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            margin: 8px 15px;
+            border-radius: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .module-item {
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .sidebar.collapsed .module-item span {
+            display: none;
+        }
+
+        body.dark-mode .module-item {
+            color: #b0b0b0;
+        }
+
+        .module-item:hover {
+            background: #f0f5ff;
+            color: #2a5298;
+            border-left: 4px solid #2a5298;
+        }
+
+        body.dark-mode .module-item:hover {
+            background: #2d3748;
+            color: #4d8aff;
+            border-left: 4px solid #4d8aff;
+        }
+
+        .module-item.active {
+            background: #e8f0ff;
+            color: #1e3c72;
+            border-left: 4px solid #1e3c72;
+            font-weight: 600;
+        }
+
+        body.dark-mode .module-item.active {
+            background: #2a3a5a;
+            color: #a3c4ff;
+            border-left: 4px solid #4d8aff;
+        }
+
+        .module-item i {
+            width: 28px;
+            text-align: center;
+            font-size: 22px;
+            color: #2a5298;
+            transition: color 0.3s;
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .module-item i {
+            color: #4d8aff;
+        }
+
+        /* BOTÓN PARA OCULTAR/MOSTRAR MENÚ - MÁS GRANDE */
+        .toggle-sidebar-btn {
+            position: absolute;
+            top: 50%;
+            right: -18px;
+            transform: translateY(-50%);
+            background: #2a5298;
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            z-index: 101;
+        }
+
+        .toggle-sidebar-btn:hover {
+            background: #1e3c72;
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        body.dark-mode .toggle-sidebar-btn {
+            background: #4d8aff;
+        }
+
+        body.dark-mode .toggle-sidebar-btn:hover {
+            background: #3a6bd6;
+        }
+
+        .sidebar.collapsed .toggle-sidebar-btn i {
+            transform: rotate(180deg);
+        }
+
+        /* TOGGLE MODO OSCURO */
+        .dark-mode-toggle {
+            padding: 25px 20px;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .sidebar.collapsed .dark-mode-toggle {
+            padding: 25px 10px;
+            justify-content: center;
+        }
+
+        .sidebar.collapsed .dark-mode-label {
+            display: none;
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            border-bottom: 1px solid #333;
+            background: #2d2d2d;
+        }
+
+        .dark-mode-label {
+            font-size: 16px;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+            white-space: nowrap;
+        }
+
+        body.dark-mode .dark-mode-label {
+            color: #b0b0b0;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 55px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 28px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #2a5298;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(27px);
+        }
+
+        body.dark-mode input:checked + .toggle-slider {
+            background-color: #4d8aff;
+        }
+
+        /* SECCIÓN DE USUARIO EN EL MENÚ */
+        .user-section {
+            padding: 30px 20px;
+            border-top: 1px solid #eaeaea;
+            background: #f8fafc;
+            margin-top: auto;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .sidebar.collapsed .user-section {
+            padding: 30px 10px;
+        }
+
+        body.dark-mode .user-section {
+            border-top: 1px solid #333;
+            background: #2d2d2d;
+        }
+
+        .user-details {
+            margin-bottom: 25px;
+            transition: all 0.3s;
+        }
+
+        .sidebar.collapsed .user-details {
+            display: none;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #1e3c72;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .user-name {
+            color: #a3c4ff;
+        }
+
+        .user-role {
+            font-size: 16px;
+            color: #666;
+            background: #eef2f7;
+            padding: 8px 15px;
+            border-radius: 15px;
+            display: inline-block;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode .user-role {
+            background: #3a3a3a;
+            color: #b0b0b0;
+        }
+
+        .user-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .sidebar.collapsed .user-actions {
+            align-items: center;
+        }
+
+        .action-btn {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            justify-content: flex-start;
+        }
+
+        .sidebar.collapsed .action-btn {
+            padding: 15px;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+        }
+
+        .sidebar.collapsed .action-btn span {
+            display: none;
+        }
+
+        body.dark-mode .action-btn {
+            background: #2d2d2d;
+            color: #e0e0e0;
+            border: 1px solid #444;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .action-btn:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-btn.profile {
+            background: #e8f0ff;
+            color: #2a5298;
+            border-color: #c2d6ff;
+        }
+
+        body.dark-mode .action-btn.profile {
+            background: #2a3a5a;
+            color: #a3c4ff;
+            border-color: #4d8aff;
+        }
+
+        .action-btn.logout {
+            background: #ffeaea;
+            color: #c62828;
+            border-color: #ffcdd2;
+        }
+
+        body.dark-mode .action-btn.logout {
+            background: #3a2a2a;
+            color: #ff6b6b;
+            border-color: #5a3a3a;
+        }
+
+        /* CONTENIDO PRINCIPAL */
+        .main-content {
+            flex: 1;
+            margin-left: 320px;
+            padding: 25px;
+            overflow-x: hidden;
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar.collapsed ~ .main-content {
+            margin-left: 80px;
+        }
+
+        /* ENCABEZADO DE PÁGINA - TÍTULO Y CONTROLES */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eaeaea;
+            transition: border-color 0.3s;
+        }
+
+        body.dark-mode .page-header {
+            border-bottom: 1px solid #333;
+        }
+
+        .page-title {
+            flex: 1;
+        }
+
+        .page-title h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2a5298;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .page-title h1 {
+            color: #4d8aff;
+        }
+
+        .page-title .subtitle {
+            font-size: 18px;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .page-title .subtitle {
+            color: #b0b0b0;
+        }
+
+        .time-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+        }
+
+        .time-filter-btn {
+            background-color: #f0f5ff;
+            color: #2a5298;
+            border: 2px solid #c2d6ff;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        body.dark-mode .time-filter-btn {
+            background-color: #2d3748;
+            color: #a3c4ff;
+            border-color: #4d8aff;
+        }
+
+        .time-filter-btn:hover {
+            background-color: #e0eaff;
+            transform: translateY(-2px);
+        }
+
+        body.dark-mode .time-filter-btn:hover {
+            background-color: #3a4a6b;
+        }
+
+        .time-filter-btn.active {
+            background-color: #2a5298;
+            color: white;
+            border-color: #2a5298;
+        }
+
+        body.dark-mode .time-filter-btn.active {
+            background-color: #4d8aff;
+            border-color: #4d8aff;
+        }
+
+        /* CONTENIDO DEL DASHBOARD */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .summary-card {
+            background-color: #1e1e1e;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .summary-card.total {
+            border-top: 5px solid #1e3c72;
+        }
+
+        body.dark-mode .summary-card.total {
+            border-top: 5px solid #4d8aff;
+        }
+
+        .summary-card.transits {
+            border-top: 5px solid #4CAF50;
+        }
+
+        body.dark-mode .summary-card.transits {
+            border-top: 5px solid #66bb6a;
+        }
+
+        .summary-card.exonerated {
+            border-top: 5px solid #FF9800;
+        }
+
+        body.dark-mode .summary-card.exonerated {
+            border-top: 5px solid #ffb74d;
+        }
+
+        .summary-card.tag {
+            border-top: 5px solid #9C27B0;
+        }
+
+        body.dark-mode .summary-card.tag {
+            border-top: 5px solid #ba68c8;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: color 0.3s;
+            font-weight: bold;
+        }
+
+        body.dark-mode .summary-title {
+            color: #b0b0b0;
+        }
+
+        .summary-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .summary-value {
+            color: #ffffff;
+        }
+
+        .summary-detail {
+            font-size: 16px;
+            color: #777;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .summary-detail {
+            color: #a0a0a0;
+        }
+
+        .trend-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .trend-container {
+            background-color: #1e1e1e;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+        }
+
+        .trend-container .card-title {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: color 0.3s;
+            font-weight: bold;
+        }
+
+        body.dark-mode .trend-container .card-title {
+            color: #e0e0e0;
+        }
+
+        .dashboard-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .main-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .main-card {
+            background-color: #1e1e1e;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+        }
+
+        .card-title {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: color 0.3s;
+            font-weight: bold;
+        }
+
+        body.dark-mode .card-title {
+            color: #e0e0e0;
+        }
+
+        .chart-container {
+            height: 350px;
+            position: relative;
+        }
+
+        .states-chart-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .states-chart-container {
+            background-color: #1e1e1e;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+        }
+
+        .pie-charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .pie-chart-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .pie-chart-card {
+            background-color: #1e1e1e;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+        }
+
+        .export-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        .export-btn {
+            background-color: #2a5298;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .export-btn {
+            background-color: #4d8aff;
+        }
+
+        .export-btn:hover {
+            background-color: #1e3c72;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.2);
+        }
+
+        body.dark-mode .export-btn:hover {
+            background-color: #3a6bd6;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .dashboard-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .dashboard-main {
+                grid-template-columns: 1fr;
+            }
+            
+            .pie-charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .sidebar:not(.collapsed) {
+                width: 320px;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .sidebar:not(.collapsed) ~ .main-content {
+                margin-left: 320px;
+            }
+            
+            .logo h2, .module-item span, .dark-mode-label, .user-details, .action-btn span {
+                display: none;
+            }
+            
+            .sidebar:not(.collapsed) .logo h2,
+            .sidebar:not(.collapsed) .module-item span,
+            .sidebar:not(.collapsed) .dark-mode-label,
+            .sidebar:not(.collapsed) .user-details,
+            .sidebar:not(.collapsed) .action-btn span {
+                display: block;
+            }
+            
+            .module-item {
+                justify-content: center;
+                padding: 20px;
+                margin: 8px;
+            }
+            
+            .sidebar:not(.collapsed) .module-item {
+                justify-content: flex-start;
+                padding: 20px 30px;
+                margin: 8px 15px;
+            }
+            
+            .module-item i {
+                font-size: 22px;
+                width: auto;
+            }
+            
+            .dark-mode-toggle {
+                justify-content: center;
+                padding: 25px 10px;
+            }
+            
+            .sidebar:not(.collapsed) .dark-mode-toggle {
+                justify-content: space-between;
+                padding: 25px 20px;
+            }
+            
+            .toggle-switch {
+                margin: 0 auto;
+            }
+            
+            .sidebar:not(.collapsed) .toggle-switch {
+                margin: 0;
+            }
+            
+            .user-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .sidebar:not(.collapsed) .user-actions {
+                align-items: stretch;
+            }
+            
+            .action-btn {
+                padding: 15px;
+                justify-content: center;
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+            }
+            
+            .sidebar:not(.collapsed) .action-btn {
+                width: auto;
+                height: auto;
+                border-radius: 8px;
+                justify-content: flex-start;
+            }
+            
+            .action-btn i {
+                font-size: 20px;
+                margin: 0;
+            }
+            
+            .toggle-sidebar-btn {
+                display: none;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            
+            .time-controls {
+                align-self: flex-start;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-summary {
+                grid-template-columns: 1fr;
+            }
+            
+            .export-section {
+                justify-content: center;
+            }
+            
+            .export-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .sidebar {
+                width: 0;
+                position: fixed;
+                z-index: 1000;
+                transition: width 0.3s;
+            }
+            
+            .sidebar.active {
+                width: 320px;
+            }
+            
+            .sidebar.active .logo h2,
+            .sidebar.active .module-item span,
+            .sidebar.active .dark-mode-label,
+            .sidebar.active .user-details,
+            .sidebar.active .action-btn span {
+                display: block;
+            }
+            
+            .sidebar.active .module-item {
+                justify-content: flex-start;
+                padding: 20px 30px;
+                margin: 8px 15px;
+            }
+            
+            .sidebar.active .dark-mode-toggle {
+                justify-content: space-between;
+                padding: 25px 20px;
+            }
+            
+            .sidebar.active .user-actions {
+                align-items: stretch;
+            }
+            
+            .sidebar.active .action-btn {
+                width: auto;
+                height: auto;
+                border-radius: 8px;
+                justify-content: flex-start;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 25px;
+                left: 25px;
+                z-index: 1001;
+                background: #2a5298;
+                color: white;
+                border: none;
+                width: 55px;
+                height: 55px;
+                border-radius: 50%;
+                font-size: 22px;
+                cursor: pointer;
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            body.dark-mode .menu-toggle {
+                background: #4d8aff;
+            }
+            
+            .page-header {
+                margin-top: 70px;
+            }
+        }
+
+        /* BOTÓN MENÚ PARA MÓVIL */
+        .menu-toggle {
+            display: none;
+        }
+        
+        /* ESTILOS PARA EL MENÚ ACTIVO EN MÓVIL */
+        .sidebar.active {
+            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* ANIMACIÓN SUAVE PARA LOS ICONOS */
+        .module-item i, .action-btn i {
+            transition: transform 0.3s;
+        }
+        
+        .module-item:hover i, .action-btn:hover i {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- MENÚ LATERAL IZQUIERDO CON FONDO CLARO -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <i class="fas fa-road fa-2x" style="color: #2a5298;"></i>
+            <h2>DataVial</h2>
+            <button class="toggle-sidebar-btn" id="toggleSidebar" title="Ocultar/Mostrar menú">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+        
+        <nav class="menu-modules">
+            <a href="#" class="module-item active" data-module="operativo">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Operativo</span>
+            </a>
+            <a href="#" class="module-item" data-module="operaciones">
+                <i class="fas fa-cogs"></i>
+                <span>Operaciones</span>
+            </a>
+            <a href="#" class="module-item" data-module="estrategico">
+                <i class="fas fa-chart-line"></i>
+                <span>Estratégico</span>
+            </a>
+            <a href="#" class="module-item" data-module="ejecutivo">
+                <i class="fas fa-users"></i>
+                <span>Ejecutivo</span>
+            </a>
+            <a href="#" class="module-item" data-module="reportes">
+                <i class="fas fa-file-alt"></i>
+                <span>Reportes</span>
+            </a>
+        </nav>
+        
+        <!-- TOGGLE MODO OSCURO -->
+        <div class="dark-mode-toggle">
+            <span class="dark-mode-label">Modo Oscuro</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        
+        <!-- SECCIÓN DE USUARIO EN EL MENÚ -->
+        <div class="user-section">
+            <div class="user-details">
+                <div class="user-name">Carlos Rodríguez</div>
+                <div class="user-role">Administrador</div>
+            </div>
+            
+            <div class="user-actions">
+                <button class="action-btn profile" id="profileBtn">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Perfil</span>
+                </button>
+                <button class="action-btn logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar Sesión</span>
+                </button>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- BOTÓN PARA ABRIR/CERRAR MENÚ EN MÓVIL -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-content">
+        <div class="container">
+            <!-- ENCABEZADO DE PÁGINA CON TÍTULO Y CONTROLES -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h1><i class="fas fa-tachometer-alt"></i> Panel Operativo</h1>
+                    <p class="subtitle">Resumen de actividad de los peajes</p>
+                </div>
+                
+                <div class="time-controls">
+                    <button class="time-filter-btn active" data-period="day">
+                        <i class="fas fa-sun"></i> Día
+                    </button>
+                    <button class="time-filter-btn" data-period="month">
+                        <i class="fas fa-calendar-alt"></i> Mes
+                    </button>
+                    <button class="time-filter-btn" data-period="year">
+                        <i class="fas fa-chart-line"></i> Año
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 4 TARJETAS PRINCIPALES PARA ADMINISTRADOR DE PEAJES -->
+            <div class="dashboard-summary">
+                <div class="summary-card total">
+                    <div class="summary-title">
+                        <i class="fas fa-money-bill-wave"></i> Recaudación Total
+                    </div>
+                    <div class="summary-value" id="total-revenue">Bs. 5.847.320,00</div>
+                    <div class="summary-detail">Cantidad recaudada del tránsito de vehículos</div>
+                </div>
+                
+                <div class="summary-card transits">
+                    <div class="summary-title">
+                        <i class="fas fa-car"></i> Tránsitos Totales
+                    </div>
+                    <div class="summary-value" id="total-transits">142.850</div>
+                    <div class="summary-detail">Total de vehículos que han circulado por los peajes</div>
+                </div>
+                
+                <div class="summary-card exonerated">
+                    <div class="summary-title">
+                        <i class="fas fa-hand-holding-heart"></i> Tránsitos Exonerados
+                    </div>
+                    <div class="summary-value" id="exonerated-transits">8.571</div>
+                    <div class="summary-detail" id="exonerated-detail">6,0% del total de tránsitos</div>
+                </div>
+                
+                <div class="summary-card tag">
+                    <div class="summary-title">
+                        <i class="fas fa-tag"></i> Tránsitos por Tag
+                    </div>
+                    <div class="summary-value" id="tag-transits">28.570</div>
+                    <div class="summary-detail" id="tag-detail">20,0% del total de tránsitos</div>
+                </div>
+            </div>
+            
+            <!-- GRÁFICO DE RECAUDACIÓN Y TRÁNSITOS -->
+            <div class="trend-container">
+                <h2 class="card-title"><i class="fas fa-chart-line"></i> Recaudación y Tránsitos de Vehículos</h2>
+                <div class="chart-container">
+                    <canvas id="trend-chart"></canvas>
+                </div>
+            </div>
+            
+            <!-- GRÁFICO DE RECAUDACIÓN POR ESTADO -->
+            <div class="states-chart-container">
+                <h2 class="card-title"><i class="fas fa-map"></i> Recaudación por Estado</h2>
+                <div class="chart-container">
+                    <canvas id="states-chart"></canvas>
+                </div>
+            </div>
+            
+            <!-- GRÁFICOS DE TORTA -->
+            <div class="pie-charts-container">
+                <!-- RECAUDACIÓN POR CATEGORÍAS DE VEHÍCULOS -->
+                <div class="pie-chart-card">
+                    <h2 class="card-title"><i class="fas fa-chart-pie"></i> Recaudación por Categorías de Vehículos</h2>
+                    <div class="chart-container">
+                        <canvas id="vehicle-categories-chart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- RECAUDACIÓN POR MÉTODO DE PAGO -->
+                <div class="pie-chart-card">
+                    <h2 class="card-title"><i class="fas fa-credit-card"></i> Recaudación por Método de Pago</h2>
+                    <div class="chart-container">
+                        <canvas id="payment-methods-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SECCIÓN DE EXPORTACIÓN -->
+            <div class="export-section">
+                <button class="export-btn" id="export-data">
+                    <i class="fas fa-download"></i> Exportar Datos
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos simulados del sistema de peajes en Venezuela
+        const tollSystemData = {
+            // Datos para vista "Día"
+            day: {
+                totalRevenue: 5847320,
+                totalTransits: 142850,
+                exoneratedTransits: 8571,
+                tagTransits: 28570,
+                
+                dailyTrend: {
+                    labels: ['6:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
+                    revenue: [320500, 485200, 612300, 745800, 820100, 785400, 642100, 436920],
+                    transits: [5200, 7850, 9850, 12050, 13200, 12500, 10200, 6850]
+                },
+                
+                vehicleCategories: [
+                    { name: "Livianos", revenue: 3800758, percentage: 65, color: "#4CAF50" },
+                    { name: "Pesados", revenue: 1286406, percentage: 22, color: "#2196F3" },
+                    { name: "Motocicletas", revenue: 467785, percentage: 8, color: "#FF9800" },
+                    { name: "Especiales", revenue: 292366, percentage: 5, color: "#9C27B0" }
+                ],
+                
+                paymentMethods: [
+                    { name: "Efectivo", revenue: 2548320, percentage: 43.6, color: "#4CAF50" },
+                    { name: "Pago Móvil", revenue: 1254320, percentage: 21.5, color: "#2196F3" },
+                    { name: "Tarjeta de Débito", revenue: 985320, percentage: 16.9, color: "#FF9800" },
+                    { name: "Tarjeta de Crédito", revenue: 654200, percentage: 11.2, color: "#9C27B0" },
+                    { name: "Tag (Teletrpeaje)", revenue: 298160, percentage: 5.1, color: "#3F51B5" },
+                    { name: "Transferencia", revenue: 65400, percentage: 1.1, color: "#00BCD4" },
+                    { name: "Billetera Digital", revenue: 45600, percentage: 0.8, color: "#8BC34A" }
+                ]
+            },
+            
+            // Datos para vista "Mes"
+            month: {
+                totalRevenue: 158473200,
+                totalTransits: 4285500,
+                exoneratedTransits: 257130,
+                tagTransits: 857100,
+                
+                dailyTrend: {
+                    labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'],
+                    revenue: [36589200, 38945100, 42015700, 40923200],
+                    transits: [1050000, 1065000, 1090000, 1080500]
+                },
+                
+                vehicleCategories: [
+                    { name: "Livianos", revenue: 103007580, percentage: 65, color: "#4CAF50" },
+                    { name: "Pesados", revenue: 34864060, percentage: 22, color: "#2196F3" },
+                    { name: "Motocicletas", revenue: 12677850, percentage: 8, color: "#FF9800" },
+                    { name: "Especiales", revenue: 7923660, percentage: 5, color: "#9C27B0" }
+                ],
+                
+                paymentMethods: [
+                    { name: "Efectivo", revenue: 69083200, percentage: 43.6, color: "#4CAF50" },
+                    { name: "Pago Móvil", revenue: 34043200, percentage: 21.5, color: "#2196F3" },
+                    { name: "Tarjeta de Débito", revenue: 26783200, percentage: 16.9, color: "#FF9800" },
+                    { name: "Tarjeta de Crédito", revenue: 17742000, percentage: 11.2, color: "#9C27B0" },
+                    { name: "Tag (Teletrpeaje)", revenue: 8081600, percentage: 5.1, color: "#3F51B5" },
+                    { name: "Transferencia", revenue: 1743400, percentage: 1.1, color: "#00BCD4" },
+                    { name: "Billetera Digital", revenue: 1267400, percentage: 0.8, color: "#8BC34A" }
+                ]
+            },
+            
+            // Datos para vista "Año"
+            year: {
+                totalRevenue: 1895478400,
+                totalTransits: 51426000,
+                exoneratedTransits: 3085560,
+                tagTransits: 10285200,
+                
+                dailyTrend: {
+                    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    revenue: [152000000, 148500000, 156800000, 142300000, 158200000, 158473200, 162100000, 155800000, 160500000, 157200000, 148900000, 151204200],
+                    transits: [4250000, 4150000, 4380000, 3970000, 4420000, 4285500, 4530000, 4360000, 4490000, 4390000, 4160000, 4220000]
+                },
+                
+                vehicleCategories: [
+                    { name: "Livianos", revenue: 1232060580, percentage: 65, color: "#4CAF50" },
+                    { name: "Pesados", revenue: 417004648, percentage: 22, color: "#2196F3" },
+                    { name: "Motocicletas", revenue: 151638272, percentage: 8, color: "#FF9800" },
+                    { name: "Especiales", revenue: 94773840, percentage: 5, color: "#9C27B0" }
+                ],
+                
+                paymentMethods: [
+                    { name: "Efectivo", revenue: 826832000, percentage: 43.6, color: "#4CAF50" },
+                    { name: "Pago Móvil", revenue: 407432000, percentage: 21.5, color: "#2196F3" },
+                    { name: "Tarjeta de Débito", revenue: 320432000, percentage: 16.9, color: "#FF9800" },
+                    { name: "Tarjeta de Crédito", revenue: 212420000, percentage: 11.2, color: "#9C27B0" },
+                    { name: "Tag (Teletrpeaje)", revenue: 96616000, percentage: 5.1, color: "#3F51B5" },
+                    { name: "Transferencia", revenue: 20874000, percentage: 1.1, color: "#00BCD4" },
+                    { name: "Billetera Digital", revenue: 15174000, percentage: 0.8, color: "#8BC34A" }
+                ]
+            },
+            
+            // Datos de estados (compartidos)
+            states: [
+                { id: "carabobo", name: "Carabobo", revenue: 1254300, transits: 28500 },
+                { id: "zulia", name: "Zulia", revenue: 980500, transits: 24500 },
+                { id: "miranda", name: "Miranda", revenue: 875200, transits: 21500 },
+                { id: "aragua", name: "Aragua", revenue: 745300, transits: 18500 },
+                { id: "lara", name: "Lara", revenue: 652100, transits: 16500 },
+                { id: "bolivar", name: "Bolívar", revenue: 523400, transits: 12500 },
+                { id: "tachira", name: "Táchira", revenue: 485200, transits: 11800 },
+                { id: "merida", name: "Mérida", revenue: 432320, transits: 10550 }
+            ]
+        };
+
+        // Variables globales
+        let trendChart, statesChart, vehicleCategoriesChart, paymentMethodsChart;
+        let currentPeriod = "day";
+        
+        // Función para formatear números con puntos para miles y comas para decimales
+        function formatNumber(number, decimals = 0) {
+            // Si el número es undefined o null, retornar 0
+            if (number === undefined || number === null) {
+                return '0';
+            }
+            
+            // Convertir a número si es string
+            const num = typeof number === 'string' ? parseFloat(number) : number;
+            
+            // Si no es un número válido, retornar 0
+            if (isNaN(num)) {
+                return '0';
+            }
+            
+            // Formatear con separadores de miles
+            const parts = num.toFixed(decimals).toString().split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            
+            // Si tiene parte decimal, unir con coma, sino solo la parte entera
+            return parts.length > 1 ? parts.join(',') : parts[0];
+        }
+        
+        // Función para formatear moneda (con 2 decimales)
+        function formatCurrency(amount) {
+            return 'Bs. ' + formatNumber(amount, 2);
+        }
+        
+        // Función para formatear números completos (sin abreviaturas)
+        function formatFullNumber(amount) {
+            return formatNumber(amount, 0);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar dashboard
+            initializeDashboard();
+            
+            // Configurar eventos
+            setupEventListeners();
+            
+            // Verificar preferencia de modo oscuro
+            checkDarkModePreference();
+            
+            // Verificar estado del menú lateral
+            checkSidebarState();
+        });
+        
+        function initializeDashboard() {
+            // Actualizar valores principales con datos iniciales (Día)
+            updateMainCards(currentPeriod);
+            
+            // Inicializar gráficos
+            initTrendChart(currentPeriod);
+            initStatesChart();
+            initVehicleCategoriesChart(currentPeriod);
+            initPaymentMethodsChart(currentPeriod);
+        }
+        
+        function updateMainCards(period) {
+            const data = tollSystemData[period];
+            
+            // Formatear valores con puntos para miles y comas para decimales
+            document.getElementById('total-revenue').textContent = formatCurrency(data.totalRevenue);
+            document.getElementById('total-transits').textContent = formatFullNumber(data.totalTransits);
+            document.getElementById('exonerated-transits').textContent = formatFullNumber(data.exoneratedTransits);
+            document.getElementById('tag-transits').textContent = formatFullNumber(data.tagTransits);
+            
+            // Actualizar porcentajes (con coma para decimales)
+            const exoneratedPercentage = ((data.exoneratedTransits / data.totalTransits) * 100).toFixed(1).replace('.', ',');
+            const tagPercentage = ((data.tagTransits / data.totalTransits) * 100).toFixed(1).replace('.', ',');
+            
+            document.getElementById('exonerated-detail').textContent = `${exoneratedPercentage}% del total de tránsitos`;
+            document.getElementById('tag-detail').textContent = `${tagPercentage}% del total de tránsitos`;
+        }
+        
+        function initTrendChart(period) {
+            const ctx = document.getElementById('trend-chart').getContext('2d');
+            const data = tollSystemData[period];
+            
+            // Destruir gráfico anterior si existe
+            if (trendChart) {
+                trendChart.destroy();
+            }
+            
+            // Configurar colores según modo oscuro
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const lineColor = isDarkMode ? '#4d8aff' : '#2a5298';
+            const transitColor = isDarkMode ? '#66bb6a' : '#4CAF50';
+            
+            trendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.dailyTrend.labels,
+                    datasets: [
+                        {
+                            label: 'Recaudación',
+                            data: data.dailyTrend.revenue,
+                            backgroundColor: isDarkMode ? 'rgba(77, 138, 255, 0.1)' : 'rgba(42, 82, 152, 0.1)',
+                            borderColor: lineColor,
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Tránsitos',
+                            data: data.dailyTrend.transits,
+                            backgroundColor: isDarkMode ? 'rgba(102, 187, 106, 0.1)' : 'rgba(76, 175, 80, 0.1)',
+                            borderColor: transitColor,
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.3,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: isDarkMode ? '#e0e0e0' : '#333'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.datasetIndex === 0) {
+                                        return `Recaudación: ${formatCurrency(context.parsed.y)}`;
+                                    } else {
+                                        return `Tránsitos: ${formatFullNumber(context.parsed.y)}`;
+                                    }
+                                }
+                            },
+                            backgroundColor: isDarkMode ? '#2d2d2d' : '#ffffff',
+                            titleColor: isDarkMode ? '#e0e0e0' : '#333',
+                            bodyColor: isDarkMode ? '#e0e0e0' : '#333',
+                            borderColor: isDarkMode ? '#444' : '#ddd'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Recaudación (Bs.)',
+                                color: isDarkMode ? '#e0e0e0' : '#333'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                color: isDarkMode ? '#b0b0b0' : '#666'
+                            },
+                            grid: {
+                                color: isDarkMode ? '#333' : '#e0e0e0'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Tránsitos',
+                                color: isDarkMode ? '#e0e0e0' : '#333'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatFullNumber(value);
+                                },
+                                color: isDarkMode ? '#b0b0b0' : '#666'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: isDarkMode ? '#b0b0b0' : '#666'
+                            },
+                            grid: {
+                                color: isDarkMode ? '#333' : '#e0e0e0'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function initStatesChart() {
+            const ctx = document.getElementById('states-chart').getContext('2d');
+            
+            // Preparar datos para el gráfico
+            const stateNames = tollSystemData.states.map(state => state.name);
+            const stateRevenues = tollSystemData.states.map(state => state.revenue);
+            
+            // Destruir gráfico anterior si existe
+            if (statesChart) {
+                statesChart.destroy();
+            }
+            
+            // Configurar colores según modo oscuro
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const barColor = isDarkMode ? '#4d8aff' : '#2a5298';
+            const borderColor = isDarkMode ? '#3a6bd6' : '#1e3c72';
+            
+            statesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: stateNames,
+                    datasets: [{
+                        label: 'Recaudación (Bs.)',
+                        data: stateRevenues,
+                        backgroundColor: barColor,
+                        borderColor: borderColor,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const state = tollSystemData.states[context.dataIndex];
+                                    const totalRevenue = tollSystemData[currentPeriod].totalRevenue;
+                                    const percentage = ((state.revenue / totalRevenue) * 100).toFixed(1).replace('.', ',');
+                                    return `Recaudación: ${formatCurrency(context.parsed.y)} (${percentage}%)`;
+                                }
+                            },
+                            backgroundColor: isDarkMode ? '#2d2d2d' : '#ffffff',
+                            titleColor: isDarkMode ? '#e0e0e0' : '#333',
+                            bodyColor: isDarkMode ? '#e0e0e0' : '#333',
+                            borderColor: isDarkMode ? '#444' : '#ddd'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                color: isDarkMode ? '#b0b0b0' : '#666'
+                            },
+                            grid: {
+                                color: isDarkMode ? '#333' : '#e0e0e0'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: isDarkMode ? '#b0b0b0' : '#666'
+                            },
+                            grid: {
+                                color: isDarkMode ? '#333' : '#e0e0e0'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function initVehicleCategoriesChart(period) {
+            const ctx = document.getElementById('vehicle-categories-chart').getContext('2d');
+            const data = tollSystemData[period];
+            
+            // Destruir gráfico anterior si existe
+            if (vehicleCategoriesChart) {
+                vehicleCategoriesChart.destroy();
+            }
+            
+            // Configurar según modo oscuro
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            vehicleCategoriesChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.vehicleCategories.map(category => category.name),
+                    datasets: [{
+                        data: data.vehicleCategories.map(category => category.percentage),
+                        backgroundColor: data.vehicleCategories.map(category => category.color),
+                        borderWidth: 2,
+                        borderColor: isDarkMode ? '#333' : '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: isDarkMode ? '#e0e0e0' : '#333'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed.toFixed(1).replace('.', ',');
+                                    const category = data.vehicleCategories[context.dataIndex];
+                                    return `${label}: ${value}% (${formatCurrency(category.revenue)})`;
+                                }
+                            },
+                            backgroundColor: isDarkMode ? '#2d2d2d' : '#ffffff',
+                            titleColor: isDarkMode ? '#e0e0e0' : '#333',
+                            bodyColor: isDarkMode ? '#e0e0e0' : '#333',
+                            borderColor: isDarkMode ? '#444' : '#ddd'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function initPaymentMethodsChart(period) {
+            const ctx = document.getElementById('payment-methods-chart').getContext('2d');
+            const data = tollSystemData[period];
+            
+            // Destruir gráfico anterior si existe
+            if (paymentMethodsChart) {
+                paymentMethodsChart.destroy();
+            }
+            
+            // Configurar según modo oscuro
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            paymentMethodsChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.paymentMethods.map(method => method.name),
+                    datasets: [{
+                        data: data.paymentMethods.map(method => method.percentage),
+                        backgroundColor: data.paymentMethods.map(method => method.color),
+                        borderWidth: 2,
+                        borderColor: isDarkMode ? '#333' : '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: isDarkMode ? '#e0e0e0' : '#333'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed.toFixed(1).replace('.', ',');
+                                    const method = data.paymentMethods[context.dataIndex];
+                                    return `${label}: ${value}% (${formatCurrency(method.revenue)})`;
+                                }
+                            },
+                            backgroundColor: isDarkMode ? '#2d2d2d' : '#ffffff',
+                            titleColor: isDarkMode ? '#e0e0e0' : '#333',
+                            bodyColor: isDarkMode ? '#e0e0e0' : '#333',
+                            borderColor: isDarkMode ? '#444' : '#ddd'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function setupEventListeners() {
+            // Botones de filtro de tiempo
+            const timeFilterButtons = document.querySelectorAll('.time-filter-btn');
+            
+            timeFilterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Quitar clase active de todos los botones
+                    timeFilterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Agregar clase active al botón clickeado
+                    this.classList.add('active');
+                    
+                    // Obtener el período seleccionado
+                    currentPeriod = this.getAttribute('data-period');
+                    
+                    // Actualizar dashboard con datos del período seleccionado
+                    updateDashboard(currentPeriod);
+                });
+            });
+            
+            // Botones de módulos en el menú lateral
+            const moduleItems = document.querySelectorAll('.module-item');
+            
+            moduleItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Quitar clase active de todos los items
+                    moduleItems.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Agregar clase active al item clickeado
+                    this.classList.add('active');
+                    
+                    // Obtener el módulo seleccionado
+                    const moduleName = this.getAttribute('data-module');
+                    
+                    // Cambiar el título del dashboard según el módulo
+                    const pageTitle = document.querySelector('.page-title h1');
+                    const pageSubtitle = document.querySelector('.page-title .subtitle');
+                    
+                    switch(moduleName) {
+                        case 'operativo':
+                            pageTitle.innerHTML = '<i class="fas fa-tachometer-alt"></i> Panel Operativo';
+                            pageSubtitle.textContent = 'Resumen de actividad de los peajes';
+                            break;
+                        case 'operaciones':
+                            pageTitle.innerHTML = '<i class="fas fa-cogs"></i> Módulo de Operaciones';
+                            pageSubtitle.textContent = 'Gestión de operaciones diarias en los peajes nacionales';
+                            break;
+                        case 'estrategico':
+                            pageTitle.innerHTML = '<i class="fas fa-chart-line"></i> Módulo Estratégico';
+                            pageSubtitle.textContent = 'Análisis estratégico y planificación a largo plazo';
+                            break;
+                        case 'ejecutivo':
+                            pageTitle.innerHTML = '<i class="fas fa-users"></i> Módulo Ejecutivo';
+                            pageSubtitle.textContent = 'Dashboard ejecutivo con indicadores de alto nivel';
+                            break;
+                        case 'reportes':
+                            pageTitle.innerHTML = '<i class="fas fa-file-alt"></i> Módulo de Reportes';
+                            pageSubtitle.textContent = 'Generación y gestión de reportes del sistema';
+                            break;
+                    }
+                    
+                    // Cerrar menú en móvil si está abierto
+                    if (window.innerWidth <= 768) {
+                        document.getElementById('sidebar').classList.remove('active');
+                    }
+                    
+                    // Aquí iría la lógica para cargar el contenido del módulo seleccionado
+                    console.log(`Módulo seleccionado: ${moduleName}`);
+                });
+            });
+            
+            // Botón de perfil
+            document.getElementById('profileBtn').addEventListener('click', function() {
+                alert('Abriendo perfil de usuario...');
+                // En una implementación real, aquí abrirías la ventana de perfil
+            });
+            
+            // Botón de cerrar sesión
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                if (confirm('¿Está seguro que desea cerrar sesión?')) {
+                    alert('Cerrando sesión... Redirigiendo a la página de inicio de sesión.');
+                    // En una implementación real, aquí redirigirías al login
+                }
+            });
+            
+            // Botón de exportación
+            document.getElementById('export-data').addEventListener('click', function() {
+                const periodText = currentPeriod === 'day' ? 'Día' : currentPeriod === 'month' ? 'Mes' : 'Año';
+                const exportData = {
+                    periodo: periodText,
+                    fecha: new Date().toLocaleDateString('es-VE'),
+                    hora: new Date().toLocaleTimeString('es-VE'),
+                    recaudacionTotal: tollSystemData[currentPeriod].totalRevenue,
+                    transitosTotales: tollSystemData[currentPeriod].totalTransits,
+                    transitosExonerados: tollSystemData[currentPeriod].exoneratedTransits,
+                    transitosTag: tollSystemData[currentPeriod].tagTransits,
+                    estados: tollSystemData.states,
+                    categoriasVehiculos: tollSystemData[currentPeriod].vehicleCategories,
+                    metodosPago: tollSystemData[currentPeriod].paymentMethods
+                };
+                
+                // Crear un blob con los datos en formato JSON
+                const dataStr = JSON.stringify(exportData, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                
+                // Crear un enlace de descarga
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(dataBlob);
+                downloadLink.download = `datos_peajes_${periodText.toLowerCase()}_${new Date().toISOString().split('T')[0]}.json`;
+                
+                // Simular clic en el enlace para descargar
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                // Mostrar mensaje de confirmación
+                alert(`Datos del período ${periodText} exportados correctamente.`);
+            });
+            
+            // Botón para abrir/cerrar menú en móvil
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+            
+            // Cerrar menú al hacer clic fuera de él en móvil
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth <= 768) {
+                    const isClickInsideSidebar = sidebar.contains(event.target);
+                    const isClickOnToggle = menuToggle.contains(event.target);
+                    
+                    if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active')) {
+                        sidebar.classList.remove('active');
+                    }
+                }
+            });
+            
+            // Ajustar menú en redimensionamiento de ventana
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+            
+            // Toggle modo oscuro
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            darkModeToggle.addEventListener('change', function() {
+                toggleDarkMode(this.checked);
+            });
+            
+            // Toggle menú lateral
+            const toggleSidebarBtn = document.getElementById('toggleSidebar');
+            toggleSidebarBtn.addEventListener('click', function() {
+                toggleSidebar();
+            });
+        }
+        
+        function updateDashboard(period) {
+            // Actualizar tarjetas principales
+            updateMainCards(period);
+            
+            // Actualizar gráficos
+            initTrendChart(period);
+            initVehicleCategoriesChart(period);
+            initPaymentMethodsChart(period);
+        }
+        
+        function toggleDarkMode(enable) {
+            const body = document.body;
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            
+            if (enable) {
+                body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');
+                darkModeToggle.checked = true;
+            } else {
+                body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'disabled');
+                darkModeToggle.checked = false;
+            }
+            
+            // Actualizar gráficos para reflejar el cambio de modo
+            initTrendChart(currentPeriod);
+            initStatesChart();
+            initVehicleCategoriesChart(currentPeriod);
+            initPaymentMethodsChart(currentPeriod);
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleIcon = document.querySelector('#toggleSidebar i');
+            
+            sidebar.classList.toggle('collapsed');
+            
+            // Cambiar el ícono según el estado
+            if (sidebar.classList.contains('collapsed')) {
+                toggleIcon.classList.remove('fa-chevron-left');
+                toggleIcon.classList.add('fa-chevron-right');
+                localStorage.setItem('sidebarCollapsed', 'true');
+            } else {
+                toggleIcon.classList.remove('fa-chevron-right');
+                toggleIcon.classList.add('fa-chevron-left');
+                localStorage.setItem('sidebarCollapsed', 'false');
+            }
+        }
+        
+        function checkDarkModePreference() {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const savedMode = localStorage.getItem('darkMode');
+            
+            if (savedMode === 'enabled' || (savedMode === null && prefersDarkScheme.matches)) {
+                toggleDarkMode(true);
+            } else {
+                toggleDarkMode(false);
+            }
+            
+            // Escuchar cambios en la preferencia del sistema
+            prefersDarkScheme.addEventListener('change', (e) => {
+                if (localStorage.getItem('darkMode') === null) {
+                    toggleDarkMode(e.matches);
+                }
+            });
+        }
+        
+        function checkSidebarState() {
+            const savedSidebarState = localStorage.getItem('sidebarCollapsed');
+            const sidebar = document.getElementById('sidebar');
+            const toggleIcon = document.querySelector('#toggleSidebar i');
+            
+            // Solo aplicar en pantallas de escritorio (mayores a 768px)
+            if (window.innerWidth > 768) {
+                if (savedSidebarState === 'true') {
+                    sidebar.classList.add('collapsed');
+                    if (toggleIcon) {
+                        toggleIcon.classList.remove('fa-chevron-left');
+                        toggleIcon.classList.add('fa-chevron-right');
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
