@@ -27,7 +27,6 @@
             color: #e0e0e0;
         }
 
-        /* MENÚ LATERAL IZQUIERDO - MÁS ANCHO Y SIMPLIFICADO */
         .sidebar {
             width: 320px;
             background: #ffffff;
@@ -63,6 +62,11 @@
             flex-shrink: 0;
         }
 
+        .sidebar.collapsed .logo {
+            padding: 20px 10px;
+            min-height: 80px;
+        }
+
         body.dark-mode .logo {
             background: #1e1e1e;
             border-bottom: 1px solid #333;
@@ -75,13 +79,19 @@
             letter-spacing: 1px;
             color: #2a5298;
             transition: color 0.3s;
+            opacity: 1;
+            transition: opacity 0.3s ease;
         }
 
         body.dark-mode .logo h2 {
             color: #4d8aff;
         }
 
-        /* Contenedor para el menú con scroll */
+        .sidebar.collapsed .logo h2 {
+            opacity: 0;
+            display: none;
+        }
+
         .menu-container {
             flex: 1;
             display: flex;
@@ -99,7 +109,6 @@
             overflow-x: hidden;
         }
 
-        /* Estilos para la barra de scroll personalizada */
         .menu-modules::-webkit-scrollbar {
             width: 6px;
             background: transparent;
@@ -191,7 +200,6 @@
             color: #4d8aff;
         }
 
-        /* BOTÓN PARA OCULTAR/MOSTRAR MENÚ - MÁS GRANDE */
         .toggle-sidebar-btn {
             position: absolute;
             top: 50%;
@@ -231,7 +239,6 @@
             transform: rotate(180deg);
         }
 
-        /* TOGGLE MODO OSCURO */
         .dark-mode-toggle {
             padding: 25px 20px;
             border-bottom: 1px solid #eaeaea;
@@ -319,7 +326,6 @@
             background-color: #4d8aff;
         }
 
-        /* SECCIÓN DE USUARIO EN EL MENÚ */
         .user-section {
             padding: 30px 20px;
             border-top: 1px solid #eaeaea;
@@ -451,7 +457,6 @@
             border-color: #5a3a3a;
         }
 
-        /* CONTENIDO PRINCIPAL */
         .main-content {
             flex: 1;
             margin-left: 320px;
@@ -464,7 +469,6 @@
             margin-left: 80px;
         }
 
-        /* ENCABEZADO DE PÁGINA - TÍTULO Y CONTROLES */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -552,7 +556,6 @@
             border-color: #4d8aff;
         }
 
-        /* CONTENIDO DEL DASHBOARD */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -793,7 +796,709 @@
             background-color: #3a6bd6;
         }
 
-        /* RESPONSIVE */
+        .filters-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .filters-container {
+            background-color: #1e1e1e;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        body.dark-mode .filter-group label {
+            color: #b0b0b0;
+        }
+
+        .custom-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #c2d6ff;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #f0f5ff;
+            color: #2a5298;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .custom-select {
+            background-color: #2d3748;
+            color: #a3c4ff;
+            border-color: #4d8aff;
+        }
+
+        .custom-select:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 2px solid #c2d6ff;
+            background-color: #f0f5ff;
+            color: #2a5298;
+            font-weight: 600;
+        }
+
+        body.dark-mode th {
+            border-bottom: 2px solid #4d8aff;
+            background-color: #2d3748;
+            color: #a3c4ff;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eaeaea;
+            text-align: center;
+        }
+
+        body.dark-mode td {
+            border-bottom: 1px solid #333;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        body.dark-mode tr:hover {
+            background-color: #2d2d2d;
+        }
+
+        .horizontal-table {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .horizontal-table th:first-child,
+        .horizontal-table td:first-child {
+            position: sticky;
+            left: 0;
+            background-color: #f0f5ff;
+            z-index: 10;
+            min-width: 180px;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        body.dark-mode .horizontal-table th:first-child,
+        body.dark-mode .horizontal-table td:first-child {
+            background-color: #2d3748;
+        }
+
+        .horizontal-table th {
+            min-width: 120px;
+            white-space: nowrap;
+        }
+
+        .total-row {
+            background-color: #e8f0ff !important;
+            font-weight: 600;
+        }
+
+        body.dark-mode .total-row {
+            background-color: #2a3a5a !important;
+        }
+
+        .revenue-row {
+            background-color: #f0f5ff !important;
+            font-weight: 600;
+            color: #2a5298;
+        }
+
+        body.dark-mode .revenue-row {
+            background-color: #2d3748 !important;
+            color: #a3c4ff;
+        }
+
+        .custom-select[multiple] {
+            height: auto;
+            min-height: 120px;
+            padding: 10px 15px;
+        }
+
+        .custom-select[multiple] option {
+            padding: 8px 12px;
+            margin: 2px 0;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .custom-select[multiple] option:checked {
+            background-color: #2a5298;
+            color: white;
+        }
+
+        body.dark-mode .custom-select[multiple] option:checked {
+            background-color: #4d8aff;
+            color: white;
+        }
+
+        .custom-select[multiple] option:hover {
+            background-color: #f0f5ff;
+        }
+
+        body.dark-mode .custom-select[multiple] option:hover {
+            background-color: #2d3748;
+        }
+
+        .mapa-peaje-icon {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 5;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transform: translate(-50%, -50%);
+        }
+
+        .mapa-peaje-icon:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .mapa-peaje-icon i {
+            font-size: 18px;
+        }
+
+        .mapa-peaje-tooltip {
+            position: absolute;
+            background: white;
+            color: #333;
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            font-size: 14px;
+            z-index: 1000;
+            pointer-events: none;
+            transform: translate(-50%, -100%);
+            margin-top: -10px;
+            min-width: 180px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        body.dark-mode .mapa-peaje-tooltip {
+            background: #2d2d2d;
+            color: #e0e0e0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .mapa-peaje-tooltip.active {
+            opacity: 1;
+        }
+
+        .mapa-peaje-tooltip h4 {
+            margin: 0 0 8px 0;
+            color: #2a5298;
+            font-size: 16px;
+        }
+
+        body.dark-mode .mapa-peaje-tooltip h4 {
+            color: #4d8aff;
+        }
+
+        .mapa-peaje-tooltip p {
+            margin: 4px 0;
+            font-size: 13px;
+        }
+
+        #mapa-info-content div {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #eaeaea;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode #mapa-info-content div {
+            background: #2d2d2d;
+            border: 1px solid #444;
+            color: #e0e0e0;
+        }
+
+        #mapa-info-content h4 {
+            margin: 0 0 10px 0;
+            color: #2a5298;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.dark-mode #mapa-info-content h4 {
+            color: #4d8aff;
+        }
+
+        #mapa-info-content .valor {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin: 5px 0;
+        }
+
+        body.dark-mode #mapa-info-content .valor {
+            color: #ffffff;
+        }
+
+        #mapa-info-content .detalle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        body.dark-mode #mapa-info-content .detalle {
+            color: #b0b0b0;
+        }
+
+        /* Estilos específicos para el módulo ejecutivo */
+        
+        .periodo-info {
+            font-size: 16px;
+            color: #666;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        body.dark-mode .periodo-info {
+            color: #b0b0b0;
+        }
+        
+        .periodo-info strong {
+            color: #2a5298;
+            font-weight: 600;
+        }
+        
+        body.dark-mode .periodo-info strong {
+            color: #4d8aff;
+        }
+        
+        .ejecutivo-update-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .update-time {
+            background: #f0f5ff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #2a5298;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #c2d6ff;
+        }
+        
+        body.dark-mode .update-time {
+            background: #2d3748;
+            color: #a3c4ff;
+            border-color: #4d8aff;
+        }
+        
+        .summary-card.monitored {
+            border-top: 5px solid #00BCD4;
+        }
+        
+        body.dark-mode .summary-card.monitored {
+            border-top: 5px solid #26c6da;
+        }
+        
+        .percentage {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+        
+        .percentage.positive {
+            background-color: rgba(76, 175, 80, 0.15);
+            color: #2E7D32;
+        }
+        
+        body.dark-mode .percentage.positive {
+            background-color: rgba(102, 187, 106, 0.2);
+            color: #66bb6a;
+        }
+        
+        .percentage.negative {
+            background-color: rgba(244, 67, 54, 0.15);
+            color: #C62828;
+        }
+        
+        body.dark-mode .percentage.negative {
+            background-color: rgba(239, 83, 80, 0.2);
+            color: #ef5350;
+        }
+        
+        .top-peajes-container {
+            overflow-x: auto;
+        }
+        
+        .top-peajes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .top-peajes-table th {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 2px solid #c2d6ff;
+            background-color: #f0f5ff;
+            color: #2a5298;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        body.dark-mode .top-peajes-table th {
+            border-bottom: 2px solid #4d8aff;
+            background-color: #2d3748;
+            color: #a3c4ff;
+        }
+        
+        .top-peajes-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #eaeaea;
+            text-align: left;
+        }
+        
+        body.dark-mode .top-peajes-table td {
+            border-bottom: 1px solid #333;
+        }
+        
+        .top-peajes-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        body.dark-mode .top-peajes-table tr:hover {
+            background-color: #2d2d2d;
+        }
+        
+        .top-peajes-table tr:nth-child(1) {
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+        
+        .top-peajes-table tr:nth-child(2) {
+            background-color: rgba(158, 158, 158, 0.1);
+        }
+        
+        .top-peajes-table tr:nth-child(3) {
+            background-color: rgba(141, 110, 99, 0.1);
+        }
+        
+        body.dark-mode .top-peajes-table tr:nth-child(1) {
+            background-color: rgba(255, 193, 7, 0.15);
+        }
+        
+        body.dark-mode .top-peajes-table tr:nth-child(2) {
+            background-color: rgba(158, 158, 158, 0.15);
+        }
+        
+        body.dark-mode .top-peajes-table tr:nth-child(3) {
+            background-color: rgba(141, 110, 99, 0.15);
+        }
+        
+        .top-peajes-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f5ff;
+            border-radius: 8px;
+            border-left: 4px solid #2a5298;
+            font-size: 15px;
+            color: #555;
+        }
+        
+        body.dark-mode .top-peajes-info {
+            background-color: #2d3748;
+            color: #b0b0b0;
+            border-left: 4px solid #4d8aff;
+        }
+        
+        .top-peajes-info i {
+            color: #2a5298;
+            margin-right: 8px;
+        }
+        
+        body.dark-mode .top-peajes-info i {
+            color: #4d8aff;
+        }
+        
+        .alertas-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        .alertas-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .alertas-container::-webkit-scrollbar-thumb {
+            background-color: rgba(42, 82, 152, 0.3);
+            border-radius: 3px;
+        }
+        
+        body.dark-mode .alertas-container::-webkit-scrollbar-thumb {
+            background-color: rgba(77, 138, 255, 0.3);
+        }
+        
+        .alerta-item {
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode .alerta-item {
+            background-color: #1e1e1e;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .alerta-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+        
+        body.dark-mode .alerta-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .alerta-item.critica {
+            border-left-color: #F44336;
+        }
+        
+        .alerta-item.advertencia {
+            border-left-color: #FF9800;
+        }
+        
+        .alerta-item.informativa {
+            border-left-color: #2196F3;
+        }
+        
+        .alerta-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .alerta-header i {
+            font-size: 20px;
+        }
+        
+        .alerta-item.critica .alerta-header i {
+            color: #F44336;
+        }
+        
+        .alerta-item.advertencia .alerta-header i {
+            color: #FF9800;
+        }
+        
+        .alerta-item.informativa .alerta-header i {
+            color: #2196F3;
+        }
+        
+        .alerta-header h4 {
+            font-size: 16px;
+            flex: 1;
+            margin: 0;
+            color: #333;
+        }
+        
+        body.dark-mode .alerta-header h4 {
+            color: #e0e0e0;
+        }
+        
+        .alerta-tag {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .alerta-item.critica .alerta-tag {
+            background-color: rgba(244, 67, 54, 0.15);
+            color: #C62828;
+        }
+        
+        .alerta-item.advertencia .alerta-tag {
+            background-color: rgba(255, 152, 0, 0.15);
+            color: #EF6C00;
+        }
+        
+        .alerta-item.informativa .alerta-tag {
+            background-color: rgba(33, 150, 243, 0.15);
+            color: #1565C0;
+        }
+        
+        body.dark-mode .alerta-item.critica .alerta-tag {
+            background-color: rgba(244, 67, 54, 0.2);
+        }
+        
+        body.dark-mode .alerta-item.advertencia .alerta-tag {
+            background-color: rgba(255, 152, 0, 0.2);
+        }
+        
+        body.dark-mode .alerta-item.informativa .alerta-tag {
+            background-color: rgba(33, 150, 243, 0.2);
+        }
+        
+        .alerta-item p {
+            margin: 0 0 15px 0;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        body.dark-mode .alerta-item p {
+            color: #b0b0b0;
+        }
+        
+        .alerta-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #888;
+        }
+        
+        body.dark-mode .alerta-footer {
+            color: #a0a0a0;
+        }
+        
+        .alerta-footer i {
+            margin-right: 5px;
+        }
+        
+        .alerta-btn {
+            background-color: transparent;
+            color: #2a5298;
+            border: 1px solid #2a5298;
+            padding: 6px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode .alerta-btn {
+            color: #4d8aff;
+            border-color: #4d8aff;
+        }
+        
+        .alerta-btn:hover {
+            background-color: #2a5298;
+            color: white;
+        }
+        
+        body.dark-mode .alerta-btn:hover {
+            background-color: #4d8aff;
+            color: white;
+        }
+        
+        /* Responsive para el módulo ejecutivo */
+        @media (max-width: 992px) {
+            .ejecutivo-update-info {
+                align-items: flex-start;
+                margin-top: 15px;
+            }
+            
+            .dashboard-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-summary {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-main {
+                grid-template-columns: 1fr;
+            }
+            
+            .alerta-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .alerta-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .alerta-btn {
+                align-self: flex-end;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #mapa-nacional-container {
+                height: 350px;
+            }
+            
+            .mapa-peaje-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
+            }
+            
+            .mapa-peaje-icon i {
+                font-size: 14px;
+            }
+            
+            #mapa-info-content {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
         @media (max-width: 1200px) {
             .dashboard-summary {
                 grid-template-columns: repeat(2, 1fr);
@@ -804,6 +1509,10 @@
             }
             
             .pie-charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-container > div {
                 grid-template-columns: 1fr;
             }
         }
@@ -999,19 +1708,21 @@
             .page-header {
                 margin-top: 70px;
             }
+
+            .horizontal-table {
+                display: block;
+                overflow-x: auto;
+            }
         }
 
-        /* BOTÓN MENÚ PARA MÓVIL */
         .menu-toggle {
             display: none;
         }
         
-        /* ESTILOS PARA EL MENÚ ACTIVO EN MÓVIL */
         .sidebar.active {
             box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
         }
         
-        /* ANIMACIÓN SUAVE PARA LOS ICONOS */
         .module-item i, .action-btn i {
             transition: transform 0.3s;
         }
@@ -1022,7 +1733,6 @@
     </style>
 </head>
 <body>
-    <!-- MENÚ LATERAL IZQUIERDO CON FONDO CLARO -->
     <aside class="sidebar" id="sidebar">
         <div class="logo">
             <i class="fas fa-road fa-2x" style="color: #2a5298;"></i>
@@ -1032,7 +1742,6 @@
             </button>
         </div>
         
-        <!-- CONTENEDOR PARA EL MENÚ CON SCROLL -->
         <div class="menu-container">
             <nav class="menu-modules">
                 <a href="#" class="module-item active" data-module="operativo">
@@ -1061,7 +1770,6 @@
                 </a>
             </nav>
             
-            <!-- TOGGLE MODO OSCURO -->
             <div class="dark-mode-toggle">
                 <span class="dark-mode-label">Modo Oscuro</span>
                 <label class="toggle-switch">
@@ -1070,7 +1778,6 @@
                 </label>
             </div>
             
-            <!-- SECCIÓN DE USUARIO EN EL MENÚ -->
             <div class="user-section">
                 <div class="user-details">
                     <div class="user-name">Carlos Rodríguez</div>
@@ -1091,117 +1798,490 @@
         </div>
     </aside>
     
-    <!-- BOTÓN PARA ABRIR/CERRAR MENÚ EN MÓVIL -->
     <button class="menu-toggle" id="menuToggle">
         <i class="fas fa-bars"></i>
     </button>
 
-    <!-- CONTENIDO PRINCIPAL -->
     <div class="main-content">
-        <div class="container">
-            <!-- ENCABEZADO DE PÁGINA CON TÍTULO Y CONTROLES -->
-            <div class="page-header">
-                <div class="page-title">
-                    <h1><i class="fas fa-tachometer-alt"></i> Panel Operativo</h1>
-                    <p class="subtitle">Resumen de actividad de los peajes</p>
+        <div id="module-operativo" class="module-container">
+            <div class="container">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1><i class="fas fa-tachometer-alt"></i> Panel Operativo</h1>
+                        <p class="subtitle">Resumen de actividad de los peajes</p>
+                    </div>
+                    
+                    <div class="time-controls">
+                        <button class="time-filter-btn active" data-period="day">
+                            <i class="fas fa-sun"></i> Día
+                        </button>
+                        <button class="time-filter-btn" data-period="month">
+                            <i class="fas fa-calendar-alt"></i> Mes
+                        </button>
+                        <button class="time-filter-btn" data-period="year">
+                            <i class="fas fa-chart-line"></i> Año
+                        </button>
+                    </div>
                 </div>
                 
-                <div class="time-controls">
-                    <button class="time-filter-btn active" data-period="day">
-                        <i class="fas fa-sun"></i> Día
-                    </button>
-                    <button class="time-filter-btn" data-period="month">
-                        <i class="fas fa-calendar-alt"></i> Mes
-                    </button>
-                    <button class="time-filter-btn" data-period="year">
-                        <i class="fas fa-chart-line"></i> Año
-                    </button>
-                </div>
-            </div>
-            
-            <!-- 4 TARJETAS PRINCIPALES PARA ADMINISTRADOR DE PEAJES -->
-            <div class="dashboard-summary">
-                <div class="summary-card total">
-                    <div class="summary-title">
-                        <i class="fas fa-money-bill-wave"></i> Recaudación Total
+                <div class="dashboard-summary">
+                    <div class="summary-card total">
+                        <div class="summary-title">
+                            <i class="fas fa-money-bill-wave"></i> Recaudación Total
+                        </div>
+                        <div class="summary-value" id="total-revenue">Bs. 5.847.320,00</div>
+                        <div class="summary-detail">Cantidad recaudada del tránsito de vehículos</div>
                     </div>
-                    <div class="summary-value" id="total-revenue">Bs. 5.847.320,00</div>
-                    <div class="summary-detail">Cantidad recaudada del tránsito de vehículos</div>
+                    
+                    <div class="summary-card transits">
+                        <div class="summary-title">
+                            <i class="fas fa-car"></i> Tránsitos Totales
+                        </div>
+                        <div class="summary-value" id="total-transits">142.850</div>
+                        <div class="summary-detail">Total de vehículos que han circulado por los peajes</div>
+                    </div>
+                    
+                    <div class="summary-card exonerated">
+                        <div class="summary-title">
+                            <i class="fas fa-hand-holding-heart"></i> Tránsitos Exonerados
+                        </div>
+                        <div class="summary-value" id="exonerated-transits">8.571</div>
+                        <div class="summary-detail" id="exonerated-detail">6,0% del total de tránsitos</div>
+                    </div>
+                    
+                    <div class="summary-card tag">
+                        <div class="summary-title">
+                            <i class="fas fa-tag"></i> Tránsitos por Tag
+                        </div>
+                        <div class="summary-value" id="tag-transits">28.570</div>
+                        <div class="summary-detail" id="tag-detail">20,0% del total de tránsitos</div>
+                    </div>
                 </div>
                 
-                <div class="summary-card transits">
-                    <div class="summary-title">
-                        <i class="fas fa-car"></i> Tránsitos Totales
-                    </div>
-                    <div class="summary-value" id="total-transits">142.850</div>
-                    <div class="summary-detail">Total de vehículos que han circulado por los peajes</div>
-                </div>
-                
-                <div class="summary-card exonerated">
-                    <div class="summary-title">
-                        <i class="fas fa-hand-holding-heart"></i> Tránsitos Exonerados
-                    </div>
-                    <div class="summary-value" id="exonerated-transits">8.571</div>
-                    <div class="summary-detail" id="exonerated-detail">6,0% del total de tránsitos</div>
-                </div>
-                
-                <div class="summary-card tag">
-                    <div class="summary-title">
-                        <i class="fas fa-tag"></i> Tránsitos por Tag
-                    </div>
-                    <div class="summary-value" id="tag-transits">28.570</div>
-                    <div class="summary-detail" id="tag-detail">20,0% del total de tránsitos</div>
-                </div>
-            </div>
-            
-            <!-- GRÁFICO DE RECAUDACIÓN Y TRÁNSITOS -->
-            <div class="trend-container">
-                <h2 class="card-title"><i class="fas fa-chart-line"></i> Recaudación y Tránsitos de Vehículos</h2>
-                <div class="chart-container">
-                    <canvas id="trend-chart"></canvas>
-                </div>
-            </div>
-            
-            <!-- GRÁFICO DE RECAUDACIÓN POR ESTADO -->
-            <div class="states-chart-container">
-                <h2 class="card-title"><i class="fas fa-map"></i> Recaudación por Estado</h2>
-                <div class="chart-container">
-                    <canvas id="states-chart"></canvas>
-                </div>
-            </div>
-            
-            <!-- GRÁFICOS DE TORTA -->
-            <div class="pie-charts-container">
-                <!-- RECAUDACIÓN POR CATEGORÍAS DE VEHÍCULOS -->
-                <div class="pie-chart-card">
-                    <h2 class="card-title"><i class="fas fa-chart-pie"></i> Recaudación por Categorías de Vehículos</h2>
+                <div class="trend-container">
+                    <h2 class="card-title"><i class="fas fa-chart-line"></i> Recaudación y Tránsitos de Vehículos</h2>
                     <div class="chart-container">
-                        <canvas id="vehicle-categories-chart"></canvas>
+                        <canvas id="trend-chart"></canvas>
                     </div>
                 </div>
                 
-                <!-- RECAUDACIÓN POR MÉTODO DE PAGO -->
-                <div class="pie-chart-card">
-                    <h2 class="card-title"><i class="fas fa-credit-card"></i> Recaudación por Método de Pago</h2>
+                <div class="states-chart-container">
+                    <h2 class="card-title"><i class="fas fa-map"></i> Recaudación por Estado</h2>
                     <div class="chart-container">
-                        <canvas id="payment-methods-chart"></canvas>
+                        <canvas id="states-chart"></canvas>
                     </div>
                 </div>
+                
+                <div class="pie-charts-container">
+                    <div class="pie-chart-card">
+                        <h2 class="card-title"><i class="fas fa-chart-pie"></i> Recaudación por Categorías de Vehículos</h2>
+                        <div class="chart-container">
+                            <canvas id="vehicle-categories-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="pie-chart-card">
+                        <h2 class="card-title"><i class="fas fa-credit-card"></i> Recaudación por Método de Pago</h2>
+                        <div class="chart-container">
+                            <canvas id="payment-methods-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="export-section">
+                    <button class="export-btn" id="export-data">
+                        <i class="fas fa-download"></i> Exportar Datos
+                    </button>
+                </div>
             </div>
-            
-            <!-- SECCIÓN DE EXPORTACIÓN -->
-            <div class="export-section">
-                <button class="export-btn" id="export-data">
-                    <i class="fas fa-download"></i> Exportar Datos
-                </button>
+        </div>
+
+        <div id="module-operaciones" class="module-container" style="display: none;">
+            <div class="container">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1><i class="fas fa-cogs"></i> Panel de Operaciones</h1>
+                        <p class="subtitle">Visualización de recaudación y tránsito de vehículos por peaje</p>
+                    </div>
+                    
+                    <div class="time-controls">
+                        <button class="time-filter-btn active" data-period="day">
+                            <i class="fas fa-sun"></i> Día
+                        </button>
+                        <button class="time-filter-btn" data-period="month">
+                            <i class="fas fa-calendar-alt"></i> Mes
+                        </button>
+                        <button class="time-filter-btn" data-period="year">
+                            <i class="fas fa-chart-line"></i> Año
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filters-container">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="filter-group">
+                            <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #555;">
+                                <i class="fas fa-map-marker-alt"></i> Estado
+                            </label>
+                            <select id="estado-filter" class="custom-select">
+                                <option value="carabobo">Carabobo</option>
+                                <option value="zulia">Zulia</option>
+                                <option value="miranda">Miranda</option>
+                                <option value="aragua">Aragua</option>
+                                <option value="lara">Lara</option>
+                                <option value="bolivar">Bolívar</option>
+                                <option value="tachira">Táchira</option>
+                                <option value="merida">Mérida</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #555;">
+                                <i class="fas fa-road"></i> Peaje
+                            </label>
+                            <select id="peaje-filter" class="custom-select" disabled>
+                                <option value="">Seleccione un estado primero</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trend-container">
+                    <h2 class="card-title">
+                        <i class="fas fa-chart-bar"></i> Recaudación por Método de Pago y Canal
+                    </h2>
+                    <div class="chart-container">
+                        <canvas id="payment-channel-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="trend-container" style="margin-top: 20px;">
+                    <h2 class="card-title">
+                        <i class="fas fa-car"></i> Tránsito de Vehículos por Categoría y Canal
+                    </h2>
+                    <div class="horizontal-table">
+                        <table>
+                            <thead id="channel-traffic-head">
+                            </thead>
+                            <tbody id="channel-traffic-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="export-section">
+                    <button class="export-btn" id="export-operaciones-data">
+                        <i class="fas fa-download"></i> Exportar Datos
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="module-estrategico" class="module-container" style="display: none;">
+            <div class="container">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1><i class="fas fa-chart-line"></i> Panel Estratégico</h1>
+                        <p class="subtitle">Comparativa entre peajes nacionales</p>
+                    </div>
+                    
+                    <div class="time-controls">
+                        <button class="time-filter-btn active" data-period="day">
+                            <i class="fas fa-sun"></i> Día
+                        </button>
+                        <button class="time-filter-btn" data-period="month">
+                            <i class="fas fa-calendar-alt"></i> Mes
+                        </button>
+                        <button class="time-filter-btn" data-period="year">
+                            <i class="fas fa-chart-line"></i> Año
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filters-container">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                        <div class="filter-group">
+                            <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #555;">
+                                <i class="fas fa-map-marker-alt"></i> Estado
+                            </label>
+                            <select id="estrategico-estado-filter" class="custom-select" multiple>
+                                <option value="all" selected>Todos los estados</option>
+                                <option value="carabobo">Carabobo</option>
+                                <option value="zulia">Zulia</option>
+                                <option value="miranda">Miranda</option>
+                                <option value="aragua">Aragua</option>
+                                <option value="lara">Lara</option>
+                                <option value="bolivar">Bolívar</option>
+                                <option value="tachira">Táchira</option>
+                                <option value="merida">Mérida</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-summary">
+                    <div class="summary-card total">
+                        <div class="summary-title">
+                            <i class="fas fa-money-bill-wave"></i> Recaudación Total
+                        </div>
+                        <div class="summary-value" id="estrategico-total-revenue">Bs. 0</div>
+                        <div class="summary-detail">Suma de recaudación</div>
+                    </div>
+                    
+                    <div class="summary-card transits">
+                        <div class="summary-title">
+                            <i class="fas fa-car"></i> Tránsito Total
+                        </div>
+                        <div class="summary-value" id="estrategico-total-transits">0</div>
+                        <div class="summary-detail">Suma de tránsitos</div>
+                    </div>
+                    
+                    <div class="summary-card exonerated">
+                        <div class="summary-title">
+                            <i class="fas fa-map-marked-alt"></i> Estado con Mayor Recaudación
+                        </div>
+                        <div class="summary-value" id="estrategico-top-state">-</div>
+                        <div class="summary-detail" id="estrategico-top-state-detail"></div>
+                    </div>
+                    
+                    <div class="summary-card tag">
+                        <div class="summary-title">
+                            <i class="fas fa-road"></i> Peaje con Mayor Recaudación
+                        </div>
+                        <div class="summary-value" id="estrategico-top-toll">-</div>
+                        <div class="summary-detail" id="estrategico-top-toll-detail"></div>
+                    </div>
+                </div>
+
+                <div class="trend-container">
+                    <h2 class="card-title"><i class="fas fa-list-ol"></i> Distribución por Estado</h2>
+                    <div class="horizontal-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">Nro.</th>
+                                    <th>Estado</th>
+                                    <th>Recaudación (Bs.)</th>
+                                    <th>Tránsito</th>
+                                    <th>% del Total Recaudación</th>
+                                    <th>Peajes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="estrategico-distribucion-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="dashboard-main">
+                    <div class="main-card">
+                        <h2 class="card-title"><i class="fas fa-money-bill-wave"></i> Recaudación por Peaje</h2>
+                        <div class="chart-container">
+                            <canvas id="estrategico-recaudacion-peaje-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="main-card">
+                        <h2 class="card-title"><i class="fas fa-car"></i> Tránsito por Peaje</h2>
+                        <div class="chart-container">
+                            <canvas id="estrategico-transito-peaje-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trend-container">
+                    <h2 class="card-title"><i class="fas fa-map"></i> Mapa Nacional de Peajes</h2>
+                    <div id="mapa-nacional-container" style="position: relative; height: 500px; background: #f8fafc; border-radius: 8px; overflow: hidden;">
+                        <div id="mapa-nacional" style="width: 100%; height: 100%; position: relative;">
+                            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+                                <svg width="90%" height="90%" viewBox="0 0 800 600" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                                    <g id="mapa-venezuela">
+                                        <path id="venezuela" d="M200,100 L250,120 L300,150 L350,200 L400,250 L450,300 L500,350 L550,400 L600,450 L650,500 L700,550 L750,500 L800,450 L850,400 L900,350 L950,300 L1000,250 L1050,200 L1100,150 L1150,120 L1200,100 L1250,150 L1300,200 L1350,250 L1400,300 L1450,350 L1500,400 L1550,450 L1600,500 L1550,550 L1500,600 L1450,550 L1400,500 L1350,450 L1300,400 L1250,350 L1200,300 L1150,250 L1100,200 L1050,150 L1000,100 L950,50 L900,100 L850,150 L800,200 L750,250 L700,300 L650,350 L600,400 L550,450 L500,500 L450,550 L400,600 L350,550 L300,500 L250,450 L200,400 L150,350 L100,300 L50,250 L100,200 L150,150 Z" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <div id="mapa-contador" style="position: absolute; top: 20px; left: 20px; background: rgba(42, 82, 152, 0.9); color: white; padding: 10px 20px; border-radius: 20px; font-weight: 600; z-index: 10;">
+                            <i class="fas fa-road"></i> <span id="contador-peajes">0</span> peajes mostrados
+                        </div>
+                    </div>
+                    
+                    <div id="mapa-info" style="display: none; margin-top: 20px; padding: 20px; background: #f0f5ff; border-radius: 8px; border-left: 4px solid #2a5298;">
+                        <h3 style="margin-bottom: 15px; color: #2a5298; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-info-circle"></i> Información del Peaje
+                        </h3>
+                        <div id="mapa-info-content" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="export-section">
+                    <button class="export-btn" id="export-estrategico-data">
+                        <i class="fas fa-download"></i> Exportar Datos
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="module-ejecutivo" class="module-container" style="display: none;">
+            <div class="container">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1><i class="fas fa-users"></i> Resumen Ejecutivo Nacional</h1>
+                        <p class="subtitle">Informe estratégico para toma de decisiones - Últimos 30 días</p>
+                        <p class="periodo-info">Período: <strong>23/12/2025 - 22/1/2026</strong></p>
+                    </div>
+                    
+                    <div class="ejecutivo-update-info">
+                        <div class="update-time">
+                            <i class="fas fa-clock"></i> Actualizado: <span id="current-date-time"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-summary">
+                    <div class="summary-card total">
+                        <div class="summary-title">
+                            <i class="fas fa-money-bill-wave"></i> Recaudación Total
+                        </div>
+                        <div class="summary-value" id="ejecutivo-total-revenue">Bs. 158.473.200,00</div>
+                        <div class="summary-detail">
+                            <span class="percentage positive"><i class="fas fa-arrow-up"></i> 8,2%</span> vs mes anterior
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card transits">
+                        <div class="summary-title">
+                            <i class="fas fa-car"></i> Tránsito Total
+                        </div>
+                        <div class="summary-value" id="ejecutivo-total-transits">4.285.500</div>
+                        <div class="summary-detail">
+                            <span class="percentage positive"><i class="fas fa-arrow-up"></i> 3,5%</span> vs mes anterior
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card exonerated">
+                        <div class="summary-title">
+                            <i class="fas fa-hand-holding-heart"></i> Tránsitos Exonerados
+                        </div>
+                        <div class="summary-value" id="ejecutivo-exonerated-transits">257.130</div>
+                        <div class="summary-detail">
+                            <span class="percentage negative"><i class="fas fa-arrow-down"></i> 1,8%</span> vs mes anterior
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card tag">
+                        <div class="summary-title">
+                            <i class="fas fa-tag"></i> Tránsitos por Tag
+                        </div>
+                        <div class="summary-value" id="ejecutivo-tag-transits">857.100</div>
+                        <div class="summary-detail">
+                            <span class="percentage positive"><i class="fas fa-arrow-up"></i> 12,5%</span> vs mes anterior
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="trend-container">
+                    <h2 class="card-title"><i class="fas fa-chart-line"></i> Tendencia Mensual de Recaudación y Tránsito</h2>
+                    <div class="chart-container">
+                        <canvas id="ejecutivo-trend-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="dashboard-main">
+                    <div class="main-card">
+                        <h2 class="card-title"><i class="fas fa-trophy"></i> Top 3 Peajes por Recaudación</h2>
+                        <div class="top-peajes-container">
+                            <table class="top-peajes-table">
+                                <thead>
+                                    <tr>
+                                        <th>Posición</th>
+                                        <th>Peaje</th>
+                                        <th>Estado</th>
+                                        <th>Recaudación (Bs.)</th>
+                                        <th>Tránsito</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="top-peajes-body">
+                                    <!-- Los datos se llenarán con JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="top-peajes-info" id="top-peajes-info">
+                            <!-- Información de total de peajes y estados se llenará con JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="main-card">
+                        <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> Alertas Estratégicas</h2>
+                        <div class="alertas-container">
+                            <div class="alerta-item critica">
+                                <div class="alerta-header">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <h4>Alta Recaudación en Peaje Caracas</h4>
+                                    <span class="alerta-tag">Crítica</span>
+                                </div>
+                                <p>El peaje Caracas superó el límite de recaudación diario en un 15%. Revisar capacidad operativa.</p>
+                                <div class="alerta-footer">
+                                    <span><i class="fas fa-clock"></i> Detectada hoy a las 14:30</span>
+                                    <button class="alerta-btn">Ver Detalle</button>
+                                </div>
+                            </div>
+                            
+                            <div class="alerta-item advertencia">
+                                <div class="alerta-header">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <h4>Caída en Tránsito - Estado Bolívar</h4>
+                                    <span class="alerta-tag">Advertencia</span>
+                                </div>
+                                <p>Reducción del 8% en tránsito en el estado Bolívar durante la última semana.</p>
+                                <div class="alerta-footer">
+                                    <span><i class="fas fa-clock"></i> Detectada hace 2 días</span>
+                                    <button class="alerta-btn">Ver Detalle</button>
+                                </div>
+                            </div>
+                            
+                            <div class="alerta-item informativa">
+                                <div class="alerta-header">
+                                    <i class="fas fa-info-circle"></i>
+                                    <h4>Incremento en Pagos Digitales</h4>
+                                    <span class="alerta-tag">Informativa</span>
+                                </div>
+                                <p>Los pagos digitales (Tag + Pago móvil) aumentaron un 5% este mes.</p>
+                                <div class="alerta-footer">
+                                    <span><i class="fas fa-clock"></i> Actualizada ayer</span>
+                                    <button class="alerta-btn">Ver Detalle</button>
+                                </div>
+                            </div>
+                            
+                            <div class="alerta-item informativa">
+                                <div class="alerta-header">
+                                    <i class="fas fa-info-circle"></i>
+                                    <h4>Estado Mérida - Bajo Desempeño</h4>
+                                    <span class="alerta-tag">Informativa</span>
+                                </div>
+                                <p>Recaudación 12% por debajo del promedio nacional en el estado Mérida.</p>
+                                <div class="alerta-footer">
+                                    <span><i class="fas fa-clock"></i> Actualizada hace 3 días</span>
+                                    <button class="alerta-btn">Ver Detalle</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="export-section">
+                    <button class="export-btn" id="export-ejecutivo-data">
+                        <i class="fas fa-download"></i> Exportar Datos
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Datos simulados del sistema de peajes en Venezuela
         const tollSystemData = {
-            // Datos para vista "Día"
             day: {
                 totalRevenue: 5847320,
                 totalTransits: 142850,
@@ -1232,7 +2312,6 @@
                 ]
             },
             
-            // Datos para vista "Mes"
             month: {
                 totalRevenue: 158473200,
                 totalTransits: 4285500,
@@ -1263,7 +2342,6 @@
                 ]
             },
             
-            // Datos para vista "Año"
             year: {
                 totalRevenue: 1895478400,
                 totalTransits: 51426000,
@@ -1294,7 +2372,6 @@
                 ]
             },
             
-            // Datos de estados (compartidos)
             states: [
                 { id: "carabobo", name: "Carabobo", revenue: 1254300, transits: 28500 },
                 { id: "zulia", name: "Zulia", revenue: 980500, transits: 24500 },
@@ -1307,62 +2384,227 @@
             ]
         };
 
-        // Variables globales
-        let trendChart, statesChart, vehicleCategoriesChart, paymentMethodsChart;
+        const operacionesData = {
+            peajesPorEstado: {
+                carabobo: [
+                    { id: "valencia", name: "Peaje Valencia", revenue: 420500, transits: 9500 },
+                    { id: "guacara", name: "Peaje Guacara", revenue: 380200, transits: 8200 },
+                    { id: "sanjoaquin", name: "Peaje San Joaquín", revenue: 310800, transits: 7200 }
+                ],
+                zulia: [
+                    { id: "maracaibo", name: "Peaje Maracaibo", revenue: 520300, transits: 11500 },
+                    { id: "cabimas", name: "Peaje Cabimas", revenue: 280400, transits: 6500 },
+                    { id: "ciudadojeda", name: "Peaje Ciudad Ojeda", revenue: 210200, transits: 5200 }
+                ],
+                miranda: [
+                    { id: "caracas", name: "Peaje Caracas", revenue: 625400, transits: 13500 },
+                    { id: "guarenas", name: "Peaje Guarenas", revenue: 320100, transits: 7500 },
+                    { id: "guatire", name: "Peaje Guatire", revenue: 295300, transits: 6800 }
+                ],
+                aragua: [
+                    { id: "maracay", name: "Peaje Maracay", revenue: 415600, transits: 9200 },
+                    { id: "turmero", name: "Peaje Turmero", revenue: 285700, transits: 6400 },
+                    { id: "cagua", name: "Peaje Cagua", revenue: 198400, transits: 4800 }
+                ],
+                lara: [
+                    { id: "barquisimeto", name: "Peaje Barquisimeto", revenue: 385200, transits: 8500 },
+                    { id: "cabudare", name: "Peaje Cabudare", revenue: 245300, transits: 5800 },
+                    { id: "duaca", name: "Peaje Duaca", revenue: 167500, transits: 4200 }
+                ],
+                bolivar: [
+                    { id: "ciudadbolivar", name: "Peaje Ciudad Bolívar", revenue: 295400, transits: 6800 },
+                    { id: "upata", name: "Peaje Upata", revenue: 187600, transits: 4500 },
+                    { id: "ciudadguayana", name: "Peaje Ciudad Guayana", revenue: 320800, transits: 7500 }
+                ],
+                tachira: [
+                    { id: "sanantonio", name: "Peaje San Antonio", revenue: 275300, transits: 6200 },
+                    { id: "san cristobal", name: "Peaje San Cristóbal", revenue: 310200, transits: 7200 },
+                    { id: "rubio", name: "Peaje Rubio", revenue: 192400, transits: 4600 }
+                ],
+                merida: [
+                    { id: "merida", name: "Peaje Mérida", revenue: 255600, transits: 5800 },
+                    { id: "ejido", name: "Peaje Ejido", revenue: 187300, transits: 4400 },
+                    { id: "tabay", name: "Peaje Tabay", revenue: 123500, transits: 3200 }
+                ]
+            },
+            
+            periodos: {
+                day: {
+                    channelPaymentData: {
+                        channels: ['Canal 1', 'Canal 2', 'Canal 3', 'Canal 4', 'Canal 5'],
+                        paymentMethods: ['Efectivo', 'Pago Móvil', 'Tarjeta Débito', 'Tarjeta Crédito', 'Tag'],
+                        revenueData: [
+                            [120500, 85000, 45200, 32800, 15000],
+                            [95000, 72000, 38500, 29500, 22000],
+                            [78000, 65000, 32000, 24500, 18000],
+                            [105000, 82000, 48000, 36500, 25000],
+                            [62500, 48000, 28500, 19800, 12000]
+                        ]
+                    },
+                    channelTrafficData: {
+                        channels: ['Canal 1', 'Canal 2', 'Canal 3', 'Canal 4', 'Canal 5'],
+                        categories: ['Livianos', 'Pesados', 'Motocicletas', 'Especiales'],
+                        trafficData: [
+                            [850, 120, 180, 45],
+                            [720, 95, 150, 35],
+                            [680, 85, 140, 30],
+                            [920, 135, 195, 50],
+                            [550, 75, 110, 25]
+                        ]
+                    }
+                },
+                month: {
+                    channelPaymentData: {
+                        channels: ['Canal 1', 'Canal 2', 'Canal 3', 'Canal 4', 'Canal 5'],
+                        paymentMethods: ['Efectivo', 'Pago Móvil', 'Tarjeta Débito', 'Tarjeta Crédito', 'Tag'],
+                        revenueData: [
+                            [3625000, 2550000, 1356000, 984000, 450000],
+                            [2850000, 2160000, 1155000, 885000, 660000],
+                            [2340000, 1950000, 960000, 735000, 540000],
+                            [3150000, 2460000, 1440000, 1095000, 750000],
+                            [1875000, 1440000, 855000, 594000, 360000]
+                        ]
+                    },
+                    channelTrafficData: {
+                        channels: ['Canal 1', 'Canal 2', 'Canal 3', 'Canal 4', 'Canal 5'],
+                        categories: ['Livianos', 'Pesados', 'Motocicletas', 'Especiales'],
+                        trafficData: [
+                            [25500, 3600, 5400, 1350],
+                            [21600, 2850, 4500, 1050],
+                            [20400, 2550, 4200, 900],
+                            [27600, 4050, 5850, 1500],
+                            [16500, 2250, 3300, 750]
+                        ]
+                    }
+                },
+                year: {
+                    channelPaymentData: {
+                        channels: ['Canal 1', 'Canal 2', 'Canal 3', 'Canal 4', 'Canal 5'],
+                        paymentMethods: ['Efectivo', 'Pago Móvil', 'Tarjeta Débito', 'Tarjeta Crédito', 'Tag'],
+                        revenueData: [
+                            [43500000, 30600000, 16272000, 11808000, 5400000],
+                            [34200000, 25920000, 13860000, 10620000, 7920000],
+                            [28080000, 23400000, 11520000, 8820000, 6480000],
+                            [37800000, 29520000, 17280000, 13140000, 9000000],
+                            [22500000, 17280000, 10260000, 7128000, 4320000]
+                        ]
+                    },
+                    channelTrafficData: {
+                        channels: ['Canal 1', 'Canal 2', 'Canal 3', 'Canal 4', 'Canal 5'],
+                        categories: ['Livianos', 'Pesados', 'Motocicletas', 'Especiales'],
+                        trafficData: [
+                            [306000, 43200, 64800, 16200],
+                            [259200, 34200, 54000, 12600],
+                            [244800, 30600, 50400, 10800],
+                            [331200, 48600, 70200, 18000],
+                            [198000, 27000, 39600, 9000]
+                        ]
+                    }
+                }
+            }
+        };
+
+        const coordenadasEstados = {
+            carabobo: { x: 45, y: 35, color: "#4CAF50", nombre: "Carabobo" },
+            zulia: { x: 20, y: 25, color: "#2196F3", nombre: "Zulia" },
+            miranda: { x: 60, y: 45, color: "#FF9800", nombre: "Miranda" },
+            aragua: { x: 50, y: 30, color: "#9C27B0", nombre: "Aragua" },
+            lara: { x: 35, y: 40, color: "#3F51B5", nombre: "Lara" },
+            bolivar: { x: 70, y: 60, color: "#00BCD4", nombre: "Bolívar" },
+            tachira: { x: 30, y: 60, color: "#8BC34A", nombre: "Táchira" },
+            merida: { x: 40, y: 55, color: "#FF5722", nombre: "Mérida" }
+        };
+
+        const coordenadasPeajes = {
+            "valencia": { estado: "carabobo", x: 48, y: 32 },
+            "guacara": { estado: "carabobo", x: 46, y: 34 },
+            "sanjoaquin": { estado: "carabobo", x: 44, y: 36 },
+            "maracaibo": { estado: "zulia", x: 18, y: 22 },
+            "cabimas": { estado: "zulia", x: 22, y: 24 },
+            "ciudadojeda": { estado: "zulia", x: 20, y: 28 },
+            "caracas": { estado: "miranda", x: 62, y: 44 },
+            "guarenas": { estado: "miranda", x: 61, y: 46 },
+            "guatire": { estado: "miranda", x: 63, y: 43 },
+            "maracay": { estado: "aragua", x: 52, y: 28 },
+            "turmero": { estado: "aragua", x: 51, y: 31 },
+            "cagua": { estado: "aragua", x: 49, y: 33 },
+            "barquisimeto": { estado: "lara", x: 37, y: 42 },
+            "cabudare": { estado: "lara", x: 36, y: 41 },
+            "duaca": { estado: "lara", x: 34, y: 39 },
+            "ciudadbolivar": { estado: "bolivar", x: 72, y: 62 },
+            "upata": { estado: "bolivar", x: 71, y: 61 },
+            "ciudadguayana": { estado: "bolivar", x: 73, y: 63 },
+            "sanantonio": { estado: "tachira", x: 28, y: 62 },
+            "san cristobal": { estado: "tachira", x: 31, y: 61 },
+            "rubio": { estado: "tachira", x: 29, y: 63 },
+            "merida": { estado: "merida", x: 42, y: 57 },
+            "ejido": { estado: "merida", x: 41, y: 56 },
+            "tabay": { estado: "merida", x: 39, y: 54 }
+        };
+
+        const ejecutivoData = {
+            monthlyTrend: {
+                labels: ['Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic', 'Ene'],
+                revenue: [142300000, 155800000, 160500000, 157200000, 148900000, 158473200, 162100000],
+                transits: [3970000, 4360000, 4490000, 4390000, 4160000, 4285500, 4530000]
+            },
+            
+            topPeajes: [
+                { name: "Peaje Caracas", state: "Miranda", revenue: 625400, transits: 13500 },
+                { name: "Peaje Maracaibo", state: "Zulia", revenue: 520300, transits: 11500 },
+                { name: "Peaje Valencia", state: "Carabobo", revenue: 420500, transits: 9500 }
+            ],
+            
+            previousMonthComparison: {
+                revenue: { current: 158473200, previous: 146500000, change: 8.2 },
+                transits: { current: 4285500, previous: 4140000, change: 3.5 },
+                exonerated: { current: 257130, previous: 261800, change: -1.8 },
+                tag: { current: 857100, previous: 762000, change: 12.5 }
+            }
+        };
+
+        let trendChart, statesChart, vehicleCategoriesChart, paymentMethodsChart, paymentChannelChart;
         let currentPeriod = "day";
+        let operacionesPeriod = "day";
+        let estrategicoPeriod = "day";
+        let estrategicoRecaudacionChart = null;
+        let estrategicoTransitoChart = null;
+        let ejecutivoTrendChart = null;
         
-        // Función para formatear números con puntos para miles y comas para decimales
         function formatNumber(number, decimals = 0) {
-            // Si el número es undefined o null, retornar 0
             if (number === undefined || number === null) {
                 return '0';
             }
             
-            // Convertir a número si es string
             const num = typeof number === 'string' ? parseFloat(number) : number;
             
-            // Si no es un número válido, retornar 0
             if (isNaN(num)) {
                 return '0';
             }
             
-            // Formatear con separadores de miles
             const parts = num.toFixed(decimals).toString().split('.');
             parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             
-            // Si tiene parte decimal, unir con coma, sino solo la parte entera
             return parts.length > 1 ? parts.join(',') : parts[0];
         }
         
-        // Función para formatear moneda (con 2 decimales)
         function formatCurrency(amount) {
             return 'Bs. ' + formatNumber(amount, 2);
         }
         
-        // Función para formatear números completos (sin abreviaturas)
         function formatFullNumber(amount) {
             return formatNumber(amount, 0);
         }
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Inicializar dashboard
             initializeDashboard();
-            
-            // Configurar eventos
             setupEventListeners();
-            
-            // Verificar preferencia de modo oscuro
             checkDarkModePreference();
-            
-            // Verificar estado del menú lateral
             checkSidebarState();
         });
         
         function initializeDashboard() {
-            // Actualizar valores principales con datos iniciales (Día)
             updateMainCards(currentPeriod);
-            
-            // Inicializar gráficos
             initTrendChart(currentPeriod);
             initStatesChart();
             initVehicleCategoriesChart(currentPeriod);
@@ -1372,13 +2614,11 @@
         function updateMainCards(period) {
             const data = tollSystemData[period];
             
-            // Formatear valores con puntos para miles y comas para decimales
             document.getElementById('total-revenue').textContent = formatCurrency(data.totalRevenue);
             document.getElementById('total-transits').textContent = formatFullNumber(data.totalTransits);
             document.getElementById('exonerated-transits').textContent = formatFullNumber(data.exoneratedTransits);
             document.getElementById('tag-transits').textContent = formatFullNumber(data.tagTransits);
             
-            // Actualizar porcentajes (con coma para decimales)
             const exoneratedPercentage = ((data.exoneratedTransits / data.totalTransits) * 100).toFixed(1).replace('.', ',');
             const tagPercentage = ((data.tagTransits / data.totalTransits) * 100).toFixed(1).replace('.', ',');
             
@@ -1390,12 +2630,10 @@
             const ctx = document.getElementById('trend-chart').getContext('2d');
             const data = tollSystemData[period];
             
-            // Destruir gráfico anterior si existe
             if (trendChart) {
                 trendChart.destroy();
             }
             
-            // Configurar colores según modo oscuro
             const isDarkMode = document.body.classList.contains('dark-mode');
             const lineColor = isDarkMode ? '#4d8aff' : '#2a5298';
             const transitColor = isDarkMode ? '#66bb6a' : '#4CAF50';
@@ -1512,16 +2750,13 @@
         function initStatesChart() {
             const ctx = document.getElementById('states-chart').getContext('2d');
             
-            // Preparar datos para el gráfico
             const stateNames = tollSystemData.states.map(state => state.name);
             const stateRevenues = tollSystemData.states.map(state => state.revenue);
             
-            // Destruir gráfico anterior si existe
             if (statesChart) {
                 statesChart.destroy();
             }
             
-            // Configurar colores según modo oscuro
             const isDarkMode = document.body.classList.contains('dark-mode');
             const barColor = isDarkMode ? '#4d8aff' : '#2a5298';
             const borderColor = isDarkMode ? '#3a6bd6' : '#1e3c72';
@@ -1590,12 +2825,10 @@
             const ctx = document.getElementById('vehicle-categories-chart').getContext('2d');
             const data = tollSystemData[period];
             
-            // Destruir gráfico anterior si existe
             if (vehicleCategoriesChart) {
                 vehicleCategoriesChart.destroy();
             }
             
-            // Configurar según modo oscuro
             const isDarkMode = document.body.classList.contains('dark-mode');
             
             vehicleCategoriesChart = new Chart(ctx, {
@@ -1642,12 +2875,10 @@
             const ctx = document.getElementById('payment-methods-chart').getContext('2d');
             const data = tollSystemData[period];
             
-            // Destruir gráfico anterior si existe
             if (paymentMethodsChart) {
                 paymentMethodsChart.destroy();
             }
             
-            // Configurar según modo oscuro
             const isDarkMode = document.body.classList.contains('dark-mode');
             
             paymentMethodsChart = new Chart(ctx, {
@@ -1690,45 +2921,1106 @@
             });
         }
         
-        function setupEventListeners() {
-            // Botones de filtro de tiempo
-            const timeFilterButtons = document.querySelectorAll('.time-filter-btn');
+        function initOperacionesModule() {
+            const estadoFilter = document.getElementById('estado-filter');
+            const peajeFilter = document.getElementById('peaje-filter');
+            
+            cargarPeajes(estadoFilter.value);
+            
+            estadoFilter.addEventListener('change', function() {
+                const estado = this.value;
+                cargarPeajes(estado);
+            });
+            
+            const timeFilterButtons = document.querySelectorAll('#module-operaciones .time-filter-btn');
             
             timeFilterButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    // Quitar clase active de todos los botones
                     timeFilterButtons.forEach(btn => btn.classList.remove('active'));
-                    
-                    // Agregar clase active al botón clickeado
                     this.classList.add('active');
-                    
-                    // Obtener el período seleccionado
+                    operacionesPeriod = this.getAttribute('data-period');
+                    initPaymentChannelChart(operacionesPeriod);
+                });
+            });
+            
+            document.getElementById('export-operaciones-data').addEventListener('click', function() {
+                const estado = document.getElementById('estado-filter').value;
+                const peaje = document.getElementById('peaje-filter').value;
+                const periodoText = operacionesPeriod === 'day' ? 'Día' : operacionesPeriod === 'month' ? 'Mes' : 'Año';
+                
+                const exportData = {
+                    modulo: "Operaciones",
+                    periodo: periodoText,
+                    fecha: new Date().toLocaleDateString('es-VE'),
+                    hora: new Date().toLocaleTimeString('es-VE'),
+                    filtros: {
+                        estado: estado,
+                        peaje: peaje
+                    },
+                    datos: operacionesData.periodos[operacionesPeriod]
+                };
+                
+                const dataStr = JSON.stringify(exportData, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(dataBlob);
+                downloadLink.download = `datos_operaciones_${periodoText.toLowerCase()}_${new Date().toISOString().split('T')[0]}.json`;
+                
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                alert(`Datos de operaciones del período ${periodoText} exportados correctamente.`);
+            });
+            
+            initPaymentChannelChart(operacionesPeriod);
+        }
+        
+        function cargarPeajes(estado) {
+            const peajeFilter = document.getElementById('peaje-filter');
+            const peajes = operacionesData.peajesPorEstado[estado];
+            
+            if (peajes && peajes.length > 0) {
+                peajeFilter.innerHTML = '';
+                
+                peajes.forEach(peaje => {
+                    peajeFilter.innerHTML += `<option value="${peaje.id}">${peaje.name}</option>`;
+                });
+                
+                peajeFilter.disabled = false;
+                peajeFilter.value = peajes[0].id;
+            } else {
+                peajeFilter.innerHTML = '<option value="">No hay peajes disponibles</option>';
+                peajeFilter.disabled = true;
+            }
+        }
+
+        function initPaymentChannelChart(period) {
+            const ctx = document.getElementById('payment-channel-chart').getContext('2d');
+            const data = operacionesData.periodos[period].channelPaymentData;
+            
+            if (paymentChannelChart) {
+                paymentChannelChart.destroy();
+            }
+            
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            const paymentMethodColors = [
+                '#4CAF50',
+                '#2196F3',
+                '#FF9800',
+                '#9C27B0',
+                '#3F51B5'
+            ];
+            
+            const datasets = data.paymentMethods.map((method, index) => {
+                const methodData = data.revenueData.map(channelData => channelData[index]);
+                
+                return {
+                    label: method,
+                    data: methodData,
+                    backgroundColor: paymentMethodColors[index],
+                    borderColor: isDarkMode ? '#333' : '#fff',
+                    borderWidth: 1
+                };
+            });
+            
+            paymentChannelChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.channels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: isDarkMode ? '#e0e0e0' : '#333'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`;
+                                }
+                            },
+                            backgroundColor: isDarkMode ? '#2d2d2d' : '#ffffff',
+                            titleColor: isDarkMode ? '#e0e0e0' : '#333',
+                            bodyColor: isDarkMode ? '#e0e0e0' : '#333',
+                            borderColor: isDarkMode ? '#444' : '#ddd'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Recaudación (Bs.)',
+                                color: isDarkMode ? '#e0e0e0' : '#333'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                color: isDarkMode ? '#b0b0b0' : '#666'
+                            },
+                            stacked: true,
+                            grid: {
+                                color: isDarkMode ? '#333' : '#e0e0e0'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: isDarkMode ? '#b0b0b0' : '#666'
+                            },
+                            stacked: true,
+                            grid: {
+                                color: isDarkMode ? '#333' : '#e0e0e0'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            updateChannelTrafficTable(period);
+        }
+
+        function updateChannelTrafficTable(period) {
+            const trafficData = operacionesData.periodos[period].channelTrafficData;
+            const paymentData = operacionesData.periodos[period].channelPaymentData;
+            const tableHead = document.getElementById('channel-traffic-head');
+            const tableBody = document.getElementById('channel-traffic-body');
+            
+            tableHead.innerHTML = '';
+            tableBody.innerHTML = '';
+            
+            const channels = trafficData.channels;
+            const categories = trafficData.categories;
+            
+            let headerHTML = '<tr>';
+            headerHTML += '<th>Categoría / Canal</th>';
+            
+            channels.forEach(channel => {
+                headerHTML += `<th>${channel}</th>`;
+            });
+            
+            headerHTML += '<th>Total</th>';
+            headerHTML += '</tr>';
+            
+            tableHead.innerHTML = headerHTML;
+            
+            categories.forEach((category, catIndex) => {
+                const row = document.createElement('tr');
+                
+                if (catIndex % 2 === 0) {
+                    row.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#2d2d2d' : '#f9f9f9';
+                }
+                
+                let rowHTML = `<td style="font-weight: 600;">${category}</td>`;
+                
+                let categoriaTotal = 0;
+                
+                channels.forEach((channel, chIndex) => {
+                    const value = trafficData.trafficData[chIndex][catIndex];
+                    categoriaTotal += value;
+                    rowHTML += `<td>${formatFullNumber(value)}</td>`;
+                });
+                
+                rowHTML += `<td style="font-weight: 600;">${formatFullNumber(categoriaTotal)}</td>`;
+                
+                row.innerHTML = rowHTML;
+                tableBody.appendChild(row);
+            });
+            
+            const totalRow = document.createElement('tr');
+            totalRow.className = 'total-row';
+            
+            let totalRowHTML = '<td style="font-weight: 600;">Total Vehículos</td>';
+            
+            let totalGeneral = 0;
+            
+            channels.forEach((channel, chIndex) => {
+                let canalTotal = 0;
+                categories.forEach((category, catIndex) => {
+                    canalTotal += trafficData.trafficData[chIndex][catIndex];
+                });
+                totalGeneral += canalTotal;
+                totalRowHTML += `<td style="font-weight: 600;">${formatFullNumber(canalTotal)}</td>`;
+            });
+            
+            totalRowHTML += `<td style="font-weight: 600;">${formatFullNumber(totalGeneral)}</td>`;
+            
+            totalRow.innerHTML = totalRowHTML;
+            tableBody.appendChild(totalRow);
+            
+            const revenueRow = document.createElement('tr');
+            revenueRow.className = 'revenue-row';
+            
+            let revenueRowHTML = '<td style="font-weight: 600;">Recaudación</td>';
+            
+            let revenueTotal = 0;
+            
+            channels.forEach((channel, chIndex) => {
+                let canalRevenue = 0;
+                paymentData.revenueData[chIndex].forEach(revenue => {
+                    canalRevenue += revenue;
+                });
+                revenueTotal += canalRevenue;
+                revenueRowHTML += `<td style="font-weight: 600;">${formatCurrency(canalRevenue)}</td>`;
+            });
+            
+            revenueRowHTML += `<td style="font-weight: 600;">${formatCurrency(revenueTotal)}</td>`;
+            
+            revenueRow.innerHTML = revenueRowHTML;
+            tableBody.appendChild(revenueRow);
+        }
+
+        function initEstrategicoModule() {
+            console.log("Inicializando módulo estratégico...");
+            
+            const estadoFilter = document.getElementById('estrategico-estado-filter');
+            
+            const timeFilterButtons = document.querySelectorAll('#module-estrategico .time-filter-btn');
+            
+            timeFilterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    timeFilterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    estrategicoPeriod = this.getAttribute('data-period');
+                    updateEstrategicoData();
+                });
+            });
+            
+            estadoFilter.addEventListener('change', function() {
+                updateEstrategicoData();
+            });
+            
+            document.getElementById('export-estrategico-data').addEventListener('click', function() {
+                exportEstrategicoData();
+            });
+            
+            updateEstrategicoData();
+        }
+
+        function updateEstrategicoData() {
+            const estadoFilter = document.getElementById('estrategico-estado-filter');
+            const selectedOptions = Array.from(estadoFilter.selectedOptions).map(option => option.value);
+            
+            let estadosSeleccionados;
+            if (selectedOptions.includes('all') || selectedOptions.length === 0) {
+                estadosSeleccionados = tollSystemData.states.map(state => state.id);
+            } else {
+                estadosSeleccionados = selectedOptions;
+            }
+            
+            const periodData = tollSystemData[estrategicoPeriod];
+            const estadosData = tollSystemData.states.filter(state => estadosSeleccionados.includes(state.id));
+            
+            let totalRevenue = 0;
+            let totalTransits = 0;
+            
+            estadosData.forEach(state => {
+                totalRevenue += state.revenue;
+                totalTransits += state.transits;
+            });
+            
+            document.getElementById('estrategico-total-revenue').textContent = formatCurrency(totalRevenue);
+            document.getElementById('estrategico-total-transits').textContent = formatFullNumber(totalTransits);
+            
+            let topState = null;
+            let maxRevenue = 0;
+            
+            estadosData.forEach(state => {
+                if (state.revenue > maxRevenue) {
+                    maxRevenue = state.revenue;
+                    topState = state;
+                }
+            });
+            
+            if (topState) {
+                document.getElementById('estrategico-top-state').textContent = topState.name;
+                const percentage = ((topState.revenue / totalRevenue) * 100).toFixed(1).replace('.', ',');
+                document.getElementById('estrategico-top-state-detail').textContent = `${percentage}% del total`;
+            }
+            
+            let topToll = null;
+            let topTollRevenue = 0;
+            
+            estadosSeleccionados.forEach(estadoId => {
+                const peajes = operacionesData.peajesPorEstado[estadoId] || [];
+                peajes.forEach(peaje => {
+                    if (peaje.revenue > topTollRevenue) {
+                        topTollRevenue = peaje.revenue;
+                        topToll = peaje;
+                    }
+                });
+            });
+            
+            if (topToll) {
+                document.getElementById('estrategico-top-toll').textContent = topToll.name;
+                const percentage = ((topToll.revenue / totalRevenue) * 100).toFixed(1).replace('.', ',');
+                document.getElementById('estrategico-top-toll-detail').textContent = `${percentage}% del total`;
+            }
+            
+            updateDistribucionTable(estadosData, totalRevenue, totalTransits);
+            updateEstrategicoCharts(estadosSeleccionados);
+            updateMapaPeajes(estadosSeleccionados);
+        }
+
+        function updateDistribucionTable(estadosData, totalRevenue, totalTransits) {
+            const tableBody = document.getElementById('estrategico-distribucion-body');
+            tableBody.innerHTML = '';
+            
+            const sortedEstados = estadosData.sort((a, b) => b.revenue - a.revenue);
+            
+            sortedEstados.forEach((state, index) => {
+                const row = document.createElement('tr');
+                
+                if (index % 2 === 0) {
+                    row.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#2d2d2d' : '#f9f9f9';
+                }
+                
+                const percentage = ((state.revenue / totalRevenue) * 100).toFixed(1).replace('.', ',');
+                const peajes = operacionesData.peajesPorEstado[state.id] || [];
+                const peajesCount = peajes.length;
+                
+                row.innerHTML = `
+                    <td style="text-align: center;">${index + 1}</td>
+                    <td style="font-weight: 600;">${state.name}</td>
+                    <td>${formatCurrency(state.revenue)}</td>
+                    <td>${formatFullNumber(state.transits)}</td>
+                    <td>${percentage}%</td>
+                    <td>${peajesCount}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updateEstrategicoCharts(estadosSeleccionados) {
+            let allPeajes = [];
+            
+            estadosSeleccionados.forEach(estadoId => {
+                const peajes = operacionesData.peajesPorEstado[estadoId] || [];
+                allPeajes = allPeajes.concat(peajes);
+            });
+            
+            allPeajes.sort((a, b) => b.revenue - a.revenue);
+            const topPeajes = allPeajes.slice(0, 10);
+            
+            const peajesNames = topPeajes.map(peaje => peaje.name);
+            const peajesRevenue = topPeajes.map(peaje => peaje.revenue);
+            const peajesTransits = topPeajes.map(peaje => peaje.transits);
+            
+            const ctxRecaudacion = document.getElementById('estrategico-recaudacion-peaje-chart').getContext('2d');
+            const ctxTransito = document.getElementById('estrategico-transito-peaje-chart').getContext('2d');
+            
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const barColor = isDarkMode ? '#4d8aff' : '#2a5298';
+            const borderColor = isDarkMode ? '#3a6bd6' : '#1e3c72';
+            
+            if (estrategicoRecaudacionChart) {
+                estrategicoRecaudacionChart.destroy();
+            }
+            if (estrategicoTransitoChart) {
+                estrategicoTransitoChart.destroy();
+            }
+            
+            estrategicoRecaudacionChart = new Chart(ctxRecaudacion, {
+                type: 'bar',
+                data: {
+                    labels: peajesNames,
+                    datasets: [{
+                        label: 'Recaudación (Bs.)',
+                        data: peajesRevenue,
+                        backgroundColor: barColor,
+                        borderColor: borderColor,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Recaudación: ${formatCurrency(context.parsed.y)}`;
+                                }
+                            },
+                            backgroundColor: isDarkMode ? '#2d2d2d' : '#ffffff',
+                            titleColor: isDarkMode ? '#e0e0e0' : '#333',
+                            bodyColor: isDarkMode ? '#e0e0e0' : '#333',
+                            borderColor: isDarkMode ? '#444' : '#ddd'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                color: isDarkMode ? '#b0b0b0' : '#666'
+                            },
+                            grid: {
+                                color: isDarkMode ? '#333' : '#e0e0e0'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: isDarkMode ? '#b0b0b0' : '#666',
+                                maxRotation: 45,
+                                minRotation: 45
+                            },
+                            grid: {
+                                color: isDarkMode ? '#333' : '#e0e0e0'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            estrategicoTransitoChart = new Chart(ctxTransito, {
+                type: 'bar',
+                data: {
+                    labels: peajesNames,
+                    datasets: [{
+                        label: 'Tránsito',
+                        data: peajesTransits,
+                        backgroundColor: isDarkMode ? '#66bb6a' : '#4CAF50',
+                        borderColor: isDarkMode ? '#4c8c4f' : '#2E7D32',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Tránsito: ${formatFullNumber(context.parsed.y)}`;
+                                }
+                            },
+                            backgroundColor: isDarkMode ? '#2d2d2d' : '#ffffff',
+                            titleColor: isDarkMode ? '#e0e0e0' : '#333',
+                            bodyColor: isDarkMode ? '#e0e0e0' : '#333',
+                            borderColor: isDarkMode ? '#444' : '#ddd'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatFullNumber(value);
+                                },
+                                color: isDarkMode ? '#b0b0b0' : '#666'
+                            },
+                            grid: {
+                                color: isDarkMode ? '#333' : '#e0e0e0'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: isDarkMode ? '#b0b0b0' : '#666',
+                                maxRotation: 45,
+                                minRotation: 45
+                            },
+                            grid: {
+                                color: isDarkMode ? '#333' : '#e0e0e0'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateMapaPeajes(estadosSeleccionados) {
+            const mapaContainer = document.getElementById('mapa-nacional');
+            
+            const iconosAnteriores = mapaContainer.querySelectorAll('.mapa-peaje-icon, .mapa-peaje-tooltip');
+            iconosAnteriores.forEach(icono => icono.remove());
+            
+            let allPeajes = [];
+            let peajesCount = 0;
+            
+            estadosSeleccionados.forEach(estadoId => {
+                const peajes = operacionesData.peajesPorEstado[estadoId] || [];
+                allPeajes = allPeajes.concat(peajes);
+                peajesCount += peajes.length;
+            });
+            
+            document.getElementById('contador-peajes').textContent = peajesCount;
+            document.getElementById('mapa-info').style.display = 'none';
+            
+            if (allPeajes.length === 0) {
+                const mensaje = document.createElement('div');
+                mensaje.style.position = 'absolute';
+                mensaje.style.top = '50%';
+                mensaje.style.left = '50%';
+                mensaje.style.transform = 'translate(-50%, -50%)';
+                mensaje.style.color = '#666';
+                mensaje.style.fontSize = '18px';
+                mensaje.style.textAlign = 'center';
+                mensaje.innerHTML = '<i class="fas fa-road fa-2x" style="margin-bottom: 15px;"></i><br>No hay peajes en los estados seleccionados';
+                mapaContainer.appendChild(mensaje);
+                return;
+            }
+            
+            const colorFijo = '#2a5298';
+            
+            allPeajes.forEach(peaje => {
+                const coords = coordenadasPeajes[peaje.id];
+                if (!coords) return;
+                
+                const posX = coords.x;
+                const posY = coords.y;
+                
+                const icono = document.createElement('div');
+                icono.className = 'mapa-peaje-icon';
+                icono.id = `peaje-${peaje.id}`;
+                icono.style.left = `${posX}%`;
+                icono.style.top = `${posY}%`;
+                icono.style.backgroundColor = colorFijo;
+                icono.style.border = `2px solid ${colorFijo}`;
+                icono.innerHTML = '<i class="fas fa-road"></i>';
+                
+                const tooltip = document.createElement('div');
+                tooltip.className = 'mapa-peaje-tooltip';
+                tooltip.id = `tooltip-${peaje.id}`;
+                tooltip.style.left = `${posX}%`;
+                tooltip.style.top = `${posY}%`;
+                
+                tooltip.innerHTML = `
+                    <h4>${peaje.name}</h4>
+                    <p><strong>Estado:</strong> ${coordenadasEstados[coords.estado].nombre}</p>
+                    <p><strong>Recaudación:</strong> ${formatCurrency(peaje.revenue)}</p>
+                    <p><strong>Tránsito:</strong> ${formatFullNumber(peaje.transits)} vehículos</p>
+                    <p><em>Click para más detalles</em></p>
+                `;
+                
+                icono.addEventListener('mouseenter', function() {
+                    tooltip.classList.add('active');
+                });
+                
+                icono.addEventListener('mouseleave', function() {
+                    tooltip.classList.remove('active');
+                });
+                
+                icono.addEventListener('click', function() {
+                    mostrarDetallePeaje(peaje, coords.estado);
+                });
+                
+                mapaContainer.appendChild(icono);
+                mapaContainer.appendChild(tooltip);
+            });
+            
+            estadosSeleccionados.forEach(estadoId => {
+                const estado = coordenadasEstados[estadoId];
+                if (!estado) return;
+                
+                const nombreEstado = document.createElement('div');
+                nombreEstado.style.position = 'absolute';
+                nombreEstado.style.left = `${estado.x}%`;
+                nombreEstado.style.top = `${estado.y}%`;
+                nombreEstado.style.transform = 'translate(-50%, 20px)';
+                nombreEstado.style.color = estado.color;
+                nombreEstado.style.fontWeight = '600';
+                nombreEstado.style.fontSize = '14px';
+                nombreEstado.style.textShadow = '1px 1px 2px rgba(255,255,255,0.8)';
+                nombreEstado.style.pointerEvents = 'none';
+                nombreEstado.textContent = estado.nombre;
+                
+                mapaContainer.appendChild(nombreEstado);
+            });
+        }
+
+        function mostrarDetallePeaje(peaje, estadoId) {
+            const mapaInfo = document.getElementById('mapa-info');
+            const mapaInfoContent = document.getElementById('mapa-info-content');
+            
+            const estadoData = tollSystemData.states.find(s => s.id === estadoId);
+            const estadoNombre = estadoData ? estadoData.name : 'Desconocido';
+            
+            const totalEstadoRevenue = estadoData ? estadoData.revenue : 0;
+            const totalEstadoTransits = estadoData ? estadoData.transits : 0;
+            
+            const porcentajeRecaudacion = totalEstadoRevenue > 0 ? ((peaje.revenue / totalEstadoRevenue) * 100).toFixed(1).replace('.', ',') : '0';
+            const porcentajeTransito = totalEstadoTransits > 0 ? ((peaje.transits / totalEstadoTransits) * 100).toFixed(1).replace('.', ',') : '0';
+            
+            mapaInfoContent.innerHTML = `
+                <div>
+                    <h4><i class="fas fa-road"></i> Información General</h4>
+                    <div class="valor">${peaje.name}</div>
+                    <div class="detalle">Estado: ${estadoNombre}</div>
+                </div>
+                
+                <div>
+                    <h4><i class="fas fa-money-bill-wave"></i> Recaudación</h4>
+                    <div class="valor">${formatCurrency(peaje.revenue)}</div>
+                    <div class="detalle">${porcentajeRecaudacion}% del total del Estado</div>
+                </div>
+                
+                <div>
+                    <h4><i class="fas fa-car"></i> Tránsito</h4>
+                    <div class="valor">${formatFullNumber(peaje.transits)}</div>
+                    <div class="detalle">${porcentajeTransito}% del total del Estado</div>
+                </div>
+            `;
+            
+            mapaInfo.style.display = 'block';
+            mapaInfo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function exportEstrategicoData() {
+            const estadoFilter = document.getElementById('estrategico-estado-filter');
+            const selectedOptions = Array.from(estadoFilter.selectedOptions).map(option => option.value);
+            
+            let estadosSeleccionados;
+            if (selectedOptions.includes('all') || selectedOptions.length === 0) {
+                estadosSeleccionados = tollSystemData.states.map(state => state.id);
+            } else {
+                estadosSeleccionados = selectedOptions;
+            }
+            
+            const periodData = tollSystemData[estrategicoPeriod];
+            const estadosData = tollSystemData.states.filter(state => estadosSeleccionados.includes(state.id));
+            
+            let totalRevenue = 0;
+            let totalTransits = 0;
+            
+            estadosData.forEach(state => {
+                totalRevenue += state.revenue;
+                totalTransits += state.transits;
+            });
+            
+            let topState = null;
+            let maxRevenue = 0;
+            
+            estadosData.forEach(state => {
+                if (state.revenue > maxRevenue) {
+                    maxRevenue = state.revenue;
+                    topState = state;
+                }
+            });
+            
+            let topToll = null;
+            let topTollRevenue = 0;
+            
+            estadosSeleccionados.forEach(estadoId => {
+                const peajes = operacionesData.peajesPorEstado[estadoId] || [];
+                peajes.forEach(peaje => {
+                    if (peaje.revenue > topTollRevenue) {
+                        topTollRevenue = peaje.revenue;
+                        topToll = peaje;
+                    }
+                });
+            });
+            
+            let allPeajes = [];
+            
+            estadosSeleccionados.forEach(estadoId => {
+                const peajes = operacionesData.peajesPorEstado[estadoId] || [];
+                allPeajes = allPeajes.concat(peajes);
+            });
+            
+            allPeajes.sort((a, b) => b.revenue - a.revenue);
+            const topPeajes = allPeajes.slice(0, 10);
+            
+            const periodText = estrategicoPeriod === 'day' ? 'Día' : estrategicoPeriod === 'month' ? 'Mes' : 'Año';
+            
+            const exportData = {
+                modulo: "Estratégico",
+                periodo: periodText,
+                fecha: new Date().toLocaleDateString('es-VE'),
+                hora: new Date().toLocaleTimeString('es-VE'),
+                filtros: {
+                    estados: estadosSeleccionados
+                },
+                resumen: {
+                    recaudacionTotal: totalRevenue,
+                    transitoTotal: totalTransits,
+                    estadoMayorRecaudacion: topState ? {
+                        nombre: topState.name,
+                        recaudacion: topState.revenue,
+                        porcentaje: ((topState.revenue / totalRevenue) * 100).toFixed(1)
+                    } : null,
+                    peajeMayorRecaudacion: topToll ? {
+                        nombre: topToll.name,
+                        recaudacion: topToll.revenue,
+                        porcentaje: ((topToll.revenue / totalRevenue) * 100).toFixed(1)
+                    } : null
+                },
+                distribucionEstados: estadosData.map(state => {
+                    const peajes = operacionesData.peajesPorEstado[state.id] || [];
+                    return {
+                        estado: state.name,
+                        recaudacion: state.revenue,
+                        transito: state.transits,
+                        porcentaje: ((state.revenue / totalRevenue) * 100).toFixed(1),
+                        peajes: peajes.length
+                    };
+                }),
+                topPeajes: topPeajes.map(peaje => {
+                    return {
+                        peaje: peaje.name,
+                        recaudacion: peaje.revenue,
+                        transito: peaje.transits
+                    };
+                }),
+                totalPeajes: allPeajes.length,
+                fechaExportacion: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(dataBlob);
+            downloadLink.download = `datos_estrategico_${periodText.toLowerCase()}_${new Date().toISOString().split('T')[0]}.json`;
+            
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            alert(`Datos del módulo estratégico (período ${periodText}) exportados correctamente.`);
+        }
+        
+        function initEjecutivoModule() {
+            console.log("Inicializando módulo ejecutivo...");
+            
+            // Actualizar fecha y hora
+            updateCurrentDateTime();
+            
+            // Actualizar datos del resumen ejecutivo
+            updateEjecutivoSummary();
+            
+            // Inicializar gráfica de tendencia
+            initEjecutivoTrendChart();
+            
+            // Cargar top peajes
+            loadTopPeajes();
+            
+            // Configurar evento de exportación
+            document.getElementById('export-ejecutivo-data').addEventListener('click', function() {
+                exportEjecutivoData();
+            });
+        }
+        
+        function updateCurrentDateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            };
+            
+            const dateTimeStr = now.toLocaleString('es-VE', options);
+            
+            document.getElementById('current-date-time').textContent = dateTimeStr;
+        }
+        
+        function updateEjecutivoSummary() {
+            const data = ejecutivoData.previousMonthComparison;
+            
+            // Formatear valores
+            document.getElementById('ejecutivo-total-revenue').textContent = formatCurrency(data.revenue.current);
+            document.getElementById('ejecutivo-total-transits').textContent = formatFullNumber(data.transits.current);
+            document.getElementById('ejecutivo-exonerated-transits').textContent = formatFullNumber(data.exonerated.current);
+            document.getElementById('ejecutivo-tag-transits').textContent = formatFullNumber(data.tag.current);
+            
+            // Contar peajes monitoreados (sumando todos los peajes de todos los estados)
+            let totalPeajes = 0;
+            Object.values(operacionesData.peajesPorEstado).forEach(peajes => {
+                totalPeajes += peajes.length;
+            });
+            
+            // Contar estados registrados
+            const totalEstados = Object.keys(operacionesData.peajesPorEstado).length;
+            
+            // Actualizar información en el top peajes
+            const infoDiv = document.getElementById('top-peajes-info');
+            infoDiv.innerHTML = `<p><i class="fas fa-info-circle"></i> Total de peajes monitoreados: <strong>${totalPeajes}</strong> en <strong>${totalEstados}</strong> estados registrados.</p>`;
+        }
+        
+        function initEjecutivoTrendChart() {
+            const ctx = document.getElementById('ejecutivo-trend-chart').getContext('2d');
+            const data = ejecutivoData.monthlyTrend;
+            
+            if (ejecutivoTrendChart) {
+                ejecutivoTrendChart.destroy();
+            }
+            
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const lineColor = isDarkMode ? '#4d8aff' : '#2a5298';
+            const transitColor = isDarkMode ? '#66bb6a' : '#4CAF50';
+            
+            ejecutivoTrendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            label: 'Recaudación',
+                            data: data.revenue,
+                            backgroundColor: isDarkMode ? 'rgba(77, 138, 255, 0.1)' : 'rgba(42, 82, 152, 0.1)',
+                            borderColor: lineColor,
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Tránsitos',
+                            data: data.transits,
+                            backgroundColor: isDarkMode ? 'rgba(102, 187, 106, 0.1)' : 'rgba(76, 175, 80, 0.1)',
+                            borderColor: transitColor,
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.3,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: isDarkMode ? '#e0e0e0' : '#333'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.datasetIndex === 0) {
+                                        return `Recaudación: ${formatCurrency(context.parsed.y)}`;
+                                    } else {
+                                        return `Tránsitos: ${formatFullNumber(context.parsed.y)}`;
+                                    }
+                                }
+                            },
+                            backgroundColor: isDarkMode ? '#2d2d2d' : '#ffffff',
+                            titleColor: isDarkMode ? '#e0e0e0' : '#333',
+                            bodyColor: isDarkMode ? '#e0e0e0' : '#333',
+                            borderColor: isDarkMode ? '#444' : '#ddd'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Recaudación (Bs.)',
+                                color: isDarkMode ? '#e0e0e0' : '#333'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                color: isDarkMode ? '#b0b0b0' : '#666'
+                            },
+                            grid: {
+                                color: isDarkMode ? '#333' : '#e0e0e0'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Tránsitos',
+                                color: isDarkMode ? '#e0e0e0' : '#333'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatFullNumber(value);
+                                },
+                                color: isDarkMode ? '#b0b0b0' : '#666'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: isDarkMode ? '#b0b0b0' : '#666'
+                            },
+                            grid: {
+                                color: isDarkMode ? '#333' : '#e0e0e0'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function loadTopPeajes() {
+            const tableBody = document.getElementById('top-peajes-body');
+            tableBody.innerHTML = '';
+            
+            ejecutivoData.topPeajes.forEach((peaje, index) => {
+                const row = document.createElement('tr');
+                
+                let positionIcon = '';
+                if (index === 0) {
+                    positionIcon = '<i class="fas fa-trophy" style="color: #FFC107;"></i>';
+                } else if (index === 1) {
+                    positionIcon = '<i class="fas fa-medal" style="color: #9E9E9E;"></i>';
+                } else {
+                    positionIcon = '<i class="fas fa-award" style="color: #8D6E63;"></i>';
+                }
+                
+                row.innerHTML = `
+                    <td style="text-align: center; font-size: 20px;">${positionIcon}</td>
+                    <td style="font-weight: 600;">${peaje.name}</td>
+                    <td>${peaje.state}</td>
+                    <td style="font-weight: 600;">${formatCurrency(peaje.revenue)}</td>
+                    <td>${formatFullNumber(peaje.transits)}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function exportEjecutivoData() {
+            // Contar peajes monitoreados y estados registrados
+            let totalPeajes = 0;
+            Object.values(operacionesData.peajesPorEstado).forEach(peajes => {
+                totalPeajes += peajes.length;
+            });
+            const totalEstados = Object.keys(operacionesData.peajesPorEstado).length;
+            
+            const exportData = {
+                modulo: "Ejecutivo",
+                titulo: "Resumen Ejecutivo Nacional",
+                periodo: "23/12/2025 - 22/1/2026",
+                fechaExportacion: new Date().toLocaleDateString('es-VE'),
+                horaExportacion: new Date().toLocaleTimeString('es-VE'),
+                resumen: {
+                    recaudacionTotal: ejecutivoData.previousMonthComparison.revenue.current,
+                    transitoTotal: ejecutivoData.previousMonthComparison.transits.current,
+                    transitosExonerados: ejecutivoData.previousMonthComparison.exonerated.current,
+                    transitosTag: ejecutivoData.previousMonthComparison.tag.current,
+                    peajesMonitoreados: totalPeajes,
+                    estadosRegistrados: totalEstados
+                },
+                comparativaMesAnterior: ejecutivoData.previousMonthComparison,
+                tendenciaMensual: ejecutivoData.monthlyTrend,
+                topPeajes: ejecutivoData.topPeajes,
+                alertasEstrategicas: [
+                    {
+                        tipo: "Crítica",
+                        titulo: "Alta Recaudación en Peaje Caracas",
+                        descripcion: "El peaje Caracas superó el límite de recaudación diario en un 15%. Revisar capacidad operativa.",
+                        fecha: "Detectada hoy a las 14:30"
+                    },
+                    {
+                        tipo: "Advertencia",
+                        titulo: "Caída en Tránsito - Estado Bolívar",
+                        descripcion: "Reducción del 8% en tránsito en el estado Bolívar durante la última semana.",
+                        fecha: "Detectada hace 2 días"
+                    },
+                    {
+                        tipo: "Informativa",
+                        titulo: "Incremento en Pagos Digitales",
+                        descripcion: "Los pagos digitales (Tag + Pago móvil) aumentaron un 5% este mes.",
+                        fecha: "Actualizada ayer"
+                    },
+                    {
+                        tipo: "Informativa",
+                        titulo: "Estado Mérida - Bajo Desempeño",
+                        descripcion: "Recaudación 12% por debajo del promedio nacional en el estado Mérida.",
+                        fecha: "Actualizada hace 3 días"
+                    }
+                ]
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(dataBlob);
+            downloadLink.download = `datos_ejecutivo_${new Date().toISOString().split('T')[0]}.json`;
+            
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            alert('Datos del módulo ejecutivo exportados correctamente.');
+        }
+        
+        function setupEventListeners() {
+            const timeFilterButtons = document.querySelectorAll('#module-operativo .time-filter-btn');
+            
+            timeFilterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    timeFilterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
                     currentPeriod = this.getAttribute('data-period');
-                    
-                    // Actualizar dashboard con datos del período seleccionado
                     updateDashboard(currentPeriod);
                 });
             });
             
-            // Botones de módulos en el menú lateral
             const moduleItems = document.querySelectorAll('.module-item');
             
             moduleItems.forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
                     
-                    // Quitar clase active de todos los items
                     moduleItems.forEach(btn => btn.classList.remove('active'));
-                    
-                    // Agregar clase active al item clickeado
                     this.classList.add('active');
                     
-                    // Obtener el módulo seleccionado
                     const moduleName = this.getAttribute('data-module');
-                    
-                    // Cambiar el título del dashboard según el módulo
                     const pageTitle = document.querySelector('.page-title h1');
                     const pageSubtitle = document.querySelector('.page-title .subtitle');
+                    
+                    document.querySelectorAll('.module-container').forEach(module => {
+                        module.style.display = 'none';
+                    });
+                    
+                    const selectedModule = document.getElementById('module-' + moduleName);
+                    if (selectedModule) {
+                        selectedModule.style.display = 'block';
+                        
+                        if (moduleName === 'operaciones') {
+                            initOperacionesModule();
+                        }
+                        if (moduleName === 'estrategico') {
+                            pageTitle.innerHTML = '<i class="fas fa-chart-line"></i> Panel Estratégico';
+                            pageSubtitle.textContent = 'Comparativa entre peajes nacionales';
+                            initEstrategicoModule();
+                        }
+                        if (moduleName === 'ejecutivo') {
+                            pageTitle.innerHTML = '<i class="fas fa-users"></i> Resumen Ejecutivo Nacional';
+                            pageSubtitle.textContent = 'Informe estratégico para toma de decisiones - Últimos 30 días';
+                            initEjecutivoModule();
+                        }
+                    }
                     
                     switch(moduleName) {
                         case 'operativo':
@@ -1736,16 +4028,16 @@
                             pageSubtitle.textContent = 'Resumen de actividad de los peajes';
                             break;
                         case 'operaciones':
-                            pageTitle.innerHTML = '<i class="fas fa-cogs"></i> Módulo de Operaciones';
-                            pageSubtitle.textContent = 'Gestión de operaciones diarias en los peajes nacionales';
+                            pageTitle.innerHTML = '<i class="fas fa-cogs"></i> Panel de Operaciones';
+                            pageSubtitle.textContent = 'Visualización de recaudación y tránsito de vehículos por peaje';
                             break;
                         case 'estrategico':
-                            pageTitle.innerHTML = '<i class="fas fa-chart-line"></i> Módulo Estratégico';
-                            pageSubtitle.textContent = 'Análisis estratégico y planificación a largo plazo';
+                            pageTitle.innerHTML = '<i class="fas fa-chart-line"></i> Panel Estratégico';
+                            pageSubtitle.textContent = 'Comparativa entre peajes nacionales';
                             break;
                         case 'ejecutivo':
-                            pageTitle.innerHTML = '<i class="fas fa-users"></i> Módulo Ejecutivo';
-                            pageSubtitle.textContent = 'Dashboard ejecutivo con indicadores de alto nivel';
+                            pageTitle.innerHTML = '<i class="fas fa-users"></i> Resumen Ejecutivo Nacional';
+                            pageSubtitle.textContent = 'Informe estratégico para toma de decisiones - Últimos 30 días';
                             break;
                         case 'usuarios':
                             pageTitle.innerHTML = '<i class="fas fa-user-friends"></i> Módulo de Usuarios';
@@ -1757,31 +4049,24 @@
                             break;
                     }
                     
-                    // Cerrar menú en móvil si está abierto
                     if (window.innerWidth <= 768) {
                         document.getElementById('sidebar').classList.remove('active');
                     }
                     
-                    // Aquí iría la lógica para cargar el contenido del módulo seleccionado
                     console.log(`Módulo seleccionado: ${moduleName}`);
                 });
             });
             
-            // Botón de perfil
             document.getElementById('profileBtn').addEventListener('click', function() {
                 alert('Abriendo perfil de usuario...');
-                // En una implementación real, aquí abrirías la ventana de perfil
             });
             
-            // Botón de cerrar sesión
             document.getElementById('logoutBtn').addEventListener('click', function() {
                 if (confirm('¿Está seguro que desea cerrar sesión?')) {
                     alert('Cerrando sesión... Redirigiendo a la página de inicio de sesión.');
-                    // En una implementación real, aquí redirigirías al login
                 }
             });
             
-            // Botón de exportación
             document.getElementById('export-data').addEventListener('click', function() {
                 const periodText = currentPeriod === 'day' ? 'Día' : currentPeriod === 'month' ? 'Mes' : 'Año';
                 const exportData = {
@@ -1797,25 +4082,20 @@
                     metodosPago: tollSystemData[currentPeriod].paymentMethods
                 };
                 
-                // Crear un blob con los datos en formato JSON
                 const dataStr = JSON.stringify(exportData, null, 2);
                 const dataBlob = new Blob([dataStr], { type: 'application/json' });
                 
-                // Crear un enlace de descarga
                 const downloadLink = document.createElement('a');
                 downloadLink.href = URL.createObjectURL(dataBlob);
                 downloadLink.download = `datos_peajes_${periodText.toLowerCase()}_${new Date().toISOString().split('T')[0]}.json`;
                 
-                // Simular clic en el enlace para descargar
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
                 
-                // Mostrar mensaje de confirmación
                 alert(`Datos del período ${periodText} exportados correctamente.`);
             });
             
-            // Botón para abrir/cerrar menú en móvil
             const menuToggle = document.getElementById('menuToggle');
             const sidebar = document.getElementById('sidebar');
             
@@ -1823,7 +4103,6 @@
                 sidebar.classList.toggle('active');
             });
             
-            // Cerrar menú al hacer clic fuera de él en móvil
             document.addEventListener('click', function(event) {
                 if (window.innerWidth <= 768) {
                     const isClickInsideSidebar = sidebar.contains(event.target);
@@ -1835,20 +4114,17 @@
                 }
             });
             
-            // Ajustar menú en redimensionamiento de ventana
             window.addEventListener('resize', function() {
                 if (window.innerWidth > 768) {
                     sidebar.classList.remove('active');
                 }
             });
             
-            // Toggle modo oscuro
             const darkModeToggle = document.getElementById('darkModeToggle');
             darkModeToggle.addEventListener('change', function() {
                 toggleDarkMode(this.checked);
             });
             
-            // Toggle menú lateral
             const toggleSidebarBtn = document.getElementById('toggleSidebar');
             toggleSidebarBtn.addEventListener('click', function() {
                 toggleSidebar();
@@ -1856,10 +4132,7 @@
         }
         
         function updateDashboard(period) {
-            // Actualizar tarjetas principales
             updateMainCards(period);
-            
-            // Actualizar gráficos
             initTrendChart(period);
             initVehicleCategoriesChart(period);
             initPaymentMethodsChart(period);
@@ -1879,11 +4152,36 @@
                 darkModeToggle.checked = false;
             }
             
-            // Actualizar gráficos para reflejar el cambio de modo
-            initTrendChart(currentPeriod);
-            initStatesChart();
-            initVehicleCategoriesChart(currentPeriod);
-            initPaymentMethodsChart(currentPeriod);
+            if (document.getElementById('module-operativo').style.display !== 'none') {
+                initTrendChart(currentPeriod);
+                initStatesChart();
+                initVehicleCategoriesChart(currentPeriod);
+                initPaymentMethodsChart(currentPeriod);
+            }
+            
+            if (document.getElementById('module-operaciones').style.display !== 'none') {
+                initPaymentChannelChart(operacionesPeriod);
+                updateChannelTrafficTable(operacionesPeriod);
+            }
+            
+            if (document.getElementById('module-estrategico').style.display !== 'none') {
+                const estadoFilter = document.getElementById('estrategico-estado-filter');
+                const selectedOptions = Array.from(estadoFilter.selectedOptions).map(option => option.value);
+                let estadosSeleccionados;
+                if (selectedOptions.includes('all') || selectedOptions.length === 0) {
+                    estadosSeleccionados = tollSystemData.states.map(state => state.id);
+                } else {
+                    estadosSeleccionados = selectedOptions;
+                }
+                
+                updateEstrategicoCharts(estadosSeleccionados);
+                updateMapaPeajes(estadosSeleccionados);
+            }
+            
+            if (document.getElementById('module-ejecutivo').style.display !== 'none') {
+                initEjecutivoTrendChart();
+                updateEjecutivoSummary();
+            }
         }
         
         function toggleSidebar() {
@@ -1892,7 +4190,6 @@
             
             sidebar.classList.toggle('collapsed');
             
-            // Cambiar el ícono según el estado
             if (sidebar.classList.contains('collapsed')) {
                 toggleIcon.classList.remove('fa-chevron-left');
                 toggleIcon.classList.add('fa-chevron-right');
@@ -1914,7 +4211,6 @@
                 toggleDarkMode(false);
             }
             
-            // Escuchar cambios en la preferencia del sistema
             prefersDarkScheme.addEventListener('change', (e) => {
                 if (localStorage.getItem('darkMode') === null) {
                     toggleDarkMode(e.matches);
@@ -1927,7 +4223,6 @@
             const sidebar = document.getElementById('sidebar');
             const toggleIcon = document.querySelector('#toggleSidebar i');
             
-            // Solo aplicar en pantallas de escritorio (mayores a 768px)
             if (window.innerWidth > 768) {
                 if (savedSidebarState === 'true') {
                     sidebar.classList.add('collapsed');
