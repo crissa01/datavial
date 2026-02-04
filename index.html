@@ -4258,7 +4258,38 @@
             checkSidebarState();
             setupPasswordToggles();
             setupReportesEventListeners();
+            
+            // Inicializar el botón de menú móvil
+            setupMobileMenu();
         });
+        
+        function setupMobileMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+            
+            // Cerrar menú al hacer clic en un módulo (solo en móvil)
+            const moduleItems = document.querySelectorAll('.module-item');
+            moduleItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Cerrar menú al hacer clic fuera del sidebar en móvil
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
+                    if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                        sidebar.classList.remove('active');
+                    }
+                }
+            });
+        }
         
         function setupPasswordToggles() {
             // Toggle para formulario de usuario
@@ -4317,7 +4348,7 @@
             });
             
             document.getElementById('volver-reporte1').addEventListener('click', function() {
-                document.getElementById('reporte1-resultados').style.display = 'none';
+                resetReportForm('reporte1');
             });
             
             document.getElementById('descargar-excel-reporte1').addEventListener('click', function() {
@@ -4334,7 +4365,7 @@
             });
             
             document.getElementById('volver-reporte2').addEventListener('click', function() {
-                document.getElementById('reporte2-resultados').style.display = 'none';
+                resetReportForm('reporte2');
             });
             
             document.getElementById('descargar-excel-reporte2').addEventListener('click', function() {
@@ -4351,7 +4382,7 @@
             });
             
             document.getElementById('volver-reporte3').addEventListener('click', function() {
-                document.getElementById('reporte3-resultados').style.display = 'none';
+                resetReportForm('reporte3');
             });
             
             document.getElementById('descargar-excel-reporte3').addEventListener('click', function() {
@@ -4368,7 +4399,7 @@
             });
             
             document.getElementById('volver-reporte4').addEventListener('click', function() {
-                document.getElementById('reporte4-resultados').style.display = 'none';
+                resetReportForm('reporte4');
             });
             
             document.getElementById('descargar-excel-reporte4').addEventListener('click', function() {
@@ -4378,6 +4409,38 @@
             document.getElementById('descargar-pdf-reporte4').addEventListener('click', function() {
                 descargarPDF('reporte4');
             });
+        }
+        
+        function resetReportForm(reporteId) {
+            // Ocultar resultados y mostrar formulario
+            document.getElementById(`${reporteId}-resultados`).style.display = 'none';
+            document.querySelector(`#module-${reporteId} .report-form-container`).style.display = 'block';
+            
+            // Resetear formulario específico
+            const formContainer = document.querySelector(`#module-${reporteId} .report-form-left`);
+            
+            // Resetear todos los inputs del formulario
+            const inputs = formContainer.querySelectorAll('input[type="date"], input[type="time"], input[type="text"]');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+            
+            // Resetear selects
+            const selects = formContainer.querySelectorAll('select');
+            selects.forEach(select => {
+                // Para selects múltiples, deseleccionar todas las opciones excepto "all"
+                if (select.multiple) {
+                    Array.from(select.options).forEach(option => {
+                        option.selected = option.value === 'all';
+                    });
+                } else {
+                    // Para selects simples, seleccionar la primera opción
+                    select.selectedIndex = 0;
+                }
+            });
+            
+            // Hacer scroll al formulario
+            formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
         function generarReporte1() {
@@ -6604,6 +6667,41 @@
         }
         
         function setupEventListeners() {
+            // Manejo del sidebar toggle (escritorio)
+            const toggleSidebarBtn = document.getElementById('toggleSidebar');
+            if (toggleSidebarBtn) {
+                toggleSidebarBtn.addEventListener('click', function() {
+                    document.getElementById('sidebar').classList.toggle('collapsed');
+                });
+            }
+            
+            // Dark mode toggle
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('change', function() {
+                    document.body.classList.toggle('dark-mode');
+                    localStorage.setItem('darkMode', this.checked);
+                    
+                    // Actualizar gráficos si existen
+                    if (trendChart) {
+                        trendChart.destroy();
+                        initTrendChart(currentPeriod);
+                    }
+                    if (statesChart) {
+                        statesChart.destroy();
+                        initStatesChart();
+                    }
+                    if (vehicleCategoriesChart) {
+                        vehicleCategoriesChart.destroy();
+                        initVehicleCategoriesChart(currentPeriod);
+                    }
+                    if (paymentMethodsChart) {
+                        paymentMethodsChart.destroy();
+                        initPaymentMethodsChart(currentPeriod);
+                    }
+                });
+            }
+            
             const timeFilterButtons = document.querySelectorAll('#module-operativo .time-filter-btn');
             
             timeFilterButtons.forEach(button => {
@@ -6616,53 +6714,46 @@
             });
             
             const moduleItems = document.querySelectorAll('.module-item');
+            const hasSubmenuItems = document.querySelectorAll('.module-item.has-submenu');
             
-            moduleItems.forEach(item => {
+            // Configurar eventos para elementos con submenú
+            hasSubmenuItems.forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     
-                    const moduleName = this.getAttribute('data-module');
+                    // Alternar la clase active solo en este elemento
+                    this.classList.toggle('active');
                     
-                    // Si es un elemento con submenú, solo alternamos el submenú
-                    if (this.classList.contains('has-submenu')) {
-                        // Alternar la clase active en este elemento
-                        document.querySelectorAll('.module-item.has-submenu').forEach(el => {
-                            if (el !== this) {
-                                el.classList.remove('active');
-                            }
-                        });
-                        this.classList.toggle('active');
-                        
-                        // No ocultamos otros módulos ni mostramos un módulo específico
-                        return;
-                    }
-                    
-                    // Para elementos normales sin submenú
-                    moduleItems.forEach(btn => {
-                        if (!btn.classList.contains('has-submenu')) {
-                            btn.classList.remove('active');
+                    // Cerrar otros submenús si están abiertos
+                    hasSubmenuItems.forEach(el => {
+                        if (el !== this) {
+                            el.classList.remove('active');
                         }
                     });
-                    this.classList.add('active');
                     
-                    // Si había algún submenú abierto, lo cerramos
-                    document.querySelectorAll('.module-item.has-submenu').forEach(el => {
-                        el.classList.remove('active');
-                    });
-                    
-                    const pageTitle = document.querySelector('.page-title h1');
-                    const pageSubtitle = document.querySelector('.page-title .subtitle');
-                    
-                    document.querySelectorAll('.module-container').forEach(module => {
-                        module.style.display = 'none';
-                    });
-                    
-                    const selectedModule = document.getElementById('module-' + moduleName);
-                    if (selectedModule) {
-                        selectedModule.style.display = 'block';
+                    // No cambiar módulos activos, solo manejar submenú
+                });
+            });
+            
+            // Configurar eventos para elementos sin submenú
+            moduleItems.forEach(item => {
+                if (!item.classList.contains('has-submenu')) {
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
                         
-                        // Para los reportes, mostrar el formulario y ocultar resultados
-                        if (moduleName.startsWith('reporte')) {
+                        const moduleName = this.getAttribute('data-module');
+                        
+                        // Si es un reporte, asegurarse de que el módulo de reportes esté activo
+                        if (moduleName && moduleName.startsWith('reporte')) {
+                            // Activar el módulo de reportes en el menú
+                            document.querySelectorAll('.module-item.has-submenu').forEach(el => {
+                                el.classList.remove('active');
+                            });
+                            document.querySelector('.module-item[data-module="reportes"]').classList.add('active');
+                            
+                            // Para los reportes, mostrar el formulario y ocultar resultados
                             document.querySelectorAll('.report-results-container').forEach(container => {
                                 container.style.display = 'none';
                             });
@@ -6671,32 +6762,59 @@
                             });
                         }
                         
-                        if (moduleName === 'operaciones') {
-                            initOperacionesModule();
+                        // Remover activo de todos los módulos (excepto los que tienen submenú)
+                        moduleItems.forEach(btn => {
+                            if (!btn.classList.contains('has-submenu')) {
+                                btn.classList.remove('active');
+                            }
+                        });
+                        this.classList.add('active');
+                        
+                        // Si había algún submenú abierto, lo cerramos excepto reportes si es un reporte
+                        document.querySelectorAll('.module-item.has-submenu').forEach(el => {
+                            if (!(moduleName && moduleName.startsWith('reporte') && el.getAttribute('data-module') === 'reportes')) {
+                                el.classList.remove('active');
+                            }
+                        });
+                        
+                        const pageTitle = document.querySelector('.page-title h1');
+                        const pageSubtitle = document.querySelector('.page-title .subtitle');
+                        
+                        document.querySelectorAll('.module-container').forEach(module => {
+                            module.style.display = 'none';
+                        });
+                        
+                        const selectedModule = document.getElementById('module-' + moduleName);
+                        if (selectedModule) {
+                            selectedModule.style.display = 'block';
+                            
+                            if (moduleName === 'operaciones') {
+                                initOperacionesModule();
+                            }
+                            if (moduleName === 'estrategico') {
+                                pageTitle.innerHTML = '<i class="fas fa-chart-line"></i> Panel Estratégico';
+                                pageSubtitle.textContent = 'Comparativa entre peajes nacionales';
+                                initEstrategicoModule();
+                            }
+                            if (moduleName === 'ejecutivo') {
+                                pageTitle.innerHTML = '<i class="fas fa-users"></i> Resumen Ejecutivo Nacional';
+                                pageSubtitle.textContent = 'Informe estratégico para toma de decisiones - Últimos 30 días';
+                                initEjecutivoModule();
+                            }
+                            if (moduleName === 'usuarios') {
+                                pageTitle.innerHTML = '<i class="fas fa-user-friends"></i> Gestión de Usuarios';
+                                pageSubtitle.textContent = 'Lista de usuarios registrados en el sistema';
+                                initUsuariosModule();
+                            }
                         }
-                        if (moduleName === 'estrategico') {
-                            pageTitle.innerHTML = '<i class="fas fa-chart-line"></i> Panel Estratégico';
-                            pageSubtitle.textContent = 'Comparativa entre peajes nacionales';
-                            initEstrategicoModule();
+                        
+                        if (window.innerWidth <= 768) {
+                            document.getElementById('sidebar').classList.remove('active');
                         }
-                        if (moduleName === 'ejecutivo') {
-                            pageTitle.innerHTML = '<i class="fas fa-users"></i> Resumen Ejecutivo Nacional';
-                            pageSubtitle.textContent = 'Informe estratégico para toma de decisiones - Últimos 30 días';
-                            initEjecutivoModule();
-                        }
-                        if (moduleName === 'usuarios') {
-                            pageTitle.innerHTML = '<i class="fas fa-user-friends"></i> Gestión de Usuarios';
-                            pageSubtitle.textContent = 'Lista de usuarios registrados en el sistema';
-                            initUsuariosModule();
-                        }
-                    }
-                    
-                    if (window.innerWidth <= 768) {
-                        document.getElementById('sidebar').classList.remove('active');
-                    }
-                    
-                    console.log(`Módulo seleccionado: ${moduleName}`);
-                });
+                        
+                        console.log(`Módulo seleccionado: ${moduleName}`);
+                    });
+                }
             });
             
             // Botón de perfil
@@ -6785,95 +6903,14 @@
                 
                 const downloadLink = document.createElement('a');
                 downloadLink.href = URL.createObjectURL(dataBlob);
-                downloadLink.download = `datos_peajes_${periodText.toLowerCase()}_${new Date().toISOString().split('T')[0]}.json`;
+                downloadLink.download = `datos_operativo_${periodText.toLowerCase()}_${new Date().toISOString().split('T')[0]}.json`;
                 
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
                 
-                alert(`Datos del módulo operativo (período ${periodText}) exportados correctamente.`);
+                alert(`Datos del período ${periodText} exportados correctamente.`);
             });
-            
-            document.getElementById('toggleSidebar').addEventListener('click', function() {
-                const sidebar = document.getElementById('sidebar');
-                sidebar.classList.toggle('collapsed');
-                
-                // Guardar estado en localStorage
-                localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
-            });
-            
-            document.getElementById('darkModeToggle').addEventListener('change', function() {
-                const isDarkMode = this.checked;
-                document.body.classList.toggle('dark-mode', isDarkMode);
-                
-                // Guardar preferencia en localStorage
-                localStorage.setItem('darkMode', isDarkMode);
-                
-                // Actualizar gráficos si existen
-                if (trendChart) {
-                    trendChart.destroy();
-                    initTrendChart(currentPeriod);
-                }
-                if (statesChart) {
-                    statesChart.destroy();
-                    initStatesChart();
-                }
-                if (vehicleCategoriesChart) {
-                    vehicleCategoriesChart.destroy();
-                    initVehicleCategoriesChart(currentPeriod);
-                }
-                if (paymentMethodsChart) {
-                    paymentMethodsChart.destroy();
-                    initPaymentMethodsChart(currentPeriod);
-                }
-                if (paymentChannelChart) {
-                    paymentChannelChart.destroy();
-                    initPaymentChannelChart(operacionesPeriod);
-                }
-            });
-            
-            document.getElementById('menuToggle').addEventListener('click', function() {
-                const sidebar = document.getElementById('sidebar');
-                sidebar.classList.toggle('active');
-                
-                // Si la barra lateral está activa, asegurarse de que no esté colapsada en móviles
-                if (sidebar.classList.contains('active')) {
-                    sidebar.classList.remove('collapsed');
-                }
-            });
-            
-            // Cerrar sidebar en móviles al hacer clic
-            document.addEventListener('click', function(e) {
-                const sidebar = document.getElementById('sidebar');
-                const menuToggle = document.getElementById('menuToggle');
-                
-                if (window.innerWidth <= 768 && sidebar.classList.contains('active') && 
-                    !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
-                    sidebar.classList.remove('active');
-                }
-            });
-        }
-        
-        function checkDarkModePreference() {
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const isDarkMode = localStorage.getItem('darkMode') === 'true';
-            
-            document.body.classList.toggle('dark-mode', isDarkMode);
-            darkModeToggle.checked = isDarkMode;
-        }
-        
-        function checkSidebarState() {
-            const sidebar = document.getElementById('sidebar');
-            const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-            
-            if (isCollapsed) {
-                sidebar.classList.add('collapsed');
-            }
-            
-            if (window.innerWidth <= 992) {
-                sidebar.classList.add('collapsed');
-                localStorage.setItem('sidebarCollapsed', 'true');
-            }
         }
         
         function updateDashboard(period) {
@@ -6881,21 +6918,50 @@
             
             if (trendChart) {
                 trendChart.destroy();
-                initTrendChart(period);
             }
-            
             if (vehicleCategoriesChart) {
                 vehicleCategoriesChart.destroy();
-                initVehicleCategoriesChart(period);
             }
-            
             if (paymentMethodsChart) {
                 paymentMethodsChart.destroy();
-                initPaymentMethodsChart(period);
             }
             
-            console.log(`Dashboard actualizado para período: ${period}`);
+            initTrendChart(period);
+            initVehicleCategoriesChart(period);
+            initPaymentMethodsChart(period);
         }
+        
+        function checkDarkModePreference() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkModePreference = localStorage.getItem('darkMode');
+            
+            if (darkModePreference === 'true') {
+                document.body.classList.add('dark-mode');
+                darkModeToggle.checked = true;
+            }
+        }
+        
+        function checkSidebarState() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarState = localStorage.getItem('sidebarCollapsed');
+            
+            if (sidebarState === 'true') {
+                sidebar.classList.add('collapsed');
+            }
+            
+            // Guardar estado del sidebar cuando se cambie
+            const toggleSidebarBtn = document.getElementById('toggleSidebar');
+            if (toggleSidebarBtn) {
+                toggleSidebarBtn.addEventListener('click', function() {
+                    const isCollapsed = sidebar.classList.contains('collapsed');
+                    localStorage.setItem('sidebarCollapsed', isCollapsed);
+                });
+            }
+        }
+        
+        // Inicializar módulo operativo por defecto
+        initializeDashboard();
     </script>
+
 </body>
 </html>
